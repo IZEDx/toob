@@ -94,7 +94,7 @@ body
             float: left
             margin-top: 5px
             height: 70px
-            width: 65%
+            width: 100%
             text-align: center
             line-height: 75px
             font: normal 50px verdana
@@ -140,14 +140,26 @@ body
         grid-column: 1/span 2
         padding: 20px
         display: grid
-        grid-template-columns: auto
+        grid-template-columns: auto auto
         grid-template-rows: 50px auto 60px
         .title
+            grid-column: 1/span 2
             font: normal 22px verdana
             font-family: Montserrat, bold
             text-align: center
             line-height: 50px
+        .body
+            grid-column: 1/span 2
+        .status
+            padding: 5px
+            font: normal 15px verdana
+            line-height: 50px
+            font-family: Montserrat, bold
+            text-align: left
+            vertical-align: bottom
+            color: rgba(255,255,255,0.5)
         .controls
+            border-top: 1px solid rgba(0,0,0,0.5)
             text-align: right
             .convert-mp3
                 color: rgb(200, 200, 50)
