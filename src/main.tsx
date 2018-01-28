@@ -2,14 +2,11 @@
 import "./index.html";
 import "./sass/main.sass";
 
-import * as $ from "jquery";
-import { getInfo } from "ytdl-core";
-
+import * as React from "react";
+import { render } from "react-dom";
 
 import { FFmpegWorker } from "./libs/ffmpeg";
-import { downloadVideo } from "./libs/youtube";
-import { saveToFile } from "./libs/utils";
-
+import { App } from "./components/app";
 
 (function() {
     const cors_api_host = 'cors-anywhere.herokuapp.com';
@@ -29,12 +26,20 @@ import { saveToFile } from "./libs/utils";
 })();
 
 async function main() {
-    const ffmpeg: FFmpegWorker = new FFmpegWorker();
+
+    const app = (<App/>);
+    
+    FFmpegWorker.singleton();
+    
     console.log("Loading FFmpeg...");
 
+    render(app, document.getElementById("app"));
+
+    
+    /*
     let filename = "";
     let id = "";
-    let video: Uint8Array = <any>null;
+    let video: Uint8Array = null as any;
 
     $("#app > .search > input").change(async ev => {
         const search: string = ""+$(ev.target).val();
@@ -110,38 +115,6 @@ async function main() {
     $("#app > .search > input").removeAttr("disabled");
     $("#app > .search > input").focus();
 
-    /*
-    let video: Uint8Array = <any>null;
-    let audio: Uint8Array = <any>null;
-
-    await new Promise( (res,rej) => {
-        setTimeout(res, 5000);
-    });
-
-    await Promise.all([
-        (async () => {
-            console.log("Loading FFmpeg...");
-            await ffmpeg.waitReady();
-            console.log("FFmpeg ready!");
-        })(),
-        (async () => {
-            console.log("Downloading video...");
-            video = await downloadVideo("MCn9lL94sxQ")
-            console.log("Video downloaded!");
-        })()
-    ]);
-
-    try {
-        console.log("Converting video...");
-        audio = await ffmpeg.convertToMp3(video);
-        console.log("Done!");
-    } catch(e) {
-        console.log(e);
-        console.error("Error converting the video:", e);
-    }
-
-    saveToFile(video, "video.mp4");
-    saveToFile(audio, "audio.mp3");
     */
 }
 

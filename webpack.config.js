@@ -7,15 +7,15 @@ const extractSass = new ExtractTextPlugin("style.css");
 const extractHtml = new ExtractTextPlugin("index.html");
 
 module.exports = {
-    entry: './src/main.ts',
+    entry: './src/main.tsx',
     devtool: 'source-map',
     devServer: {
-        contentBase: path.join(__dirname, "dist"),
+        contentBase: path.join(__dirname, "assets"),
         compress: true,
         port: 9000
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.join(__dirname, "dist"),
         filename: 'bundle.js',
         publicPath: '/'
     },

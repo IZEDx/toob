@@ -53,6 +53,7 @@ declare interface FFmpegWorker {
 }
 
 class FFmpegWorker extends EventWorker {
+    static instance: FFmpegWorker;
     private _ready: boolean = false;
 
     constructor() {
@@ -60,6 +61,13 @@ class FFmpegWorker extends EventWorker {
         super.on("message", this.onMessage.bind(this));
         super.on("error", this.onError.bind(this));
         this.once("ready", () => this._ready = true);
+    }
+
+    static singleton() {
+        if (this.instance === undefined) {
+            this.instance = new FFmpegWorker();
+        }
+        return this.instance;
     }
 
     private onMessage(e: MessageEvent) {

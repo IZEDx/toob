@@ -10,6 +10,7 @@
         "experimentalDecorators": true,
         "removeComments": true,
         "strict": true,
+        "jsx": "react",
         "noUnusedLocals": true,
         "suppressImplicitAnyIndexErrors": true,
         "lib": [
