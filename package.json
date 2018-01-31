@@ -5,8 +5,9 @@
   "author": "IZED",
   "private": true,
   "scripts": {
-    "start": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline --no-info",
-    "watch": "npm run build -- --watch",
+    "start": "npm run build && npm run dev-server",
+    "dev-server": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline --no-info --watch-poll",
+    "watch": "npm run build -- --watch-poll",
     "build": "node node_modules/webpack/bin/webpack.js"
   },
   "dependencies": {
