@@ -2,6 +2,7 @@
 import * as React from "react";
 import * as Radium from "radium";
 import { getInfo } from "ytdl-core";
+import { FocusEvent } from "react";
 
 const style = {
     search: {
@@ -9,10 +10,14 @@ const style = {
         height: "55px",
         backgroundColor: "rgba(255, 255, 255, 0.05)",
         padding: "10px 30px",
-        borderBottom: "solid 1px rgba(0, 0, 0, 0.3)",
-        overflow: "hidden" as "hidden"
+        borderLeft: "solid 1.5px rgba(0, 0, 0, 0.5)",
+        borderBottom: "solid 1.5px rgba(0, 0, 0, 0.5)",
+        overflow: "hidden" as "hidden",
+        ":focus>.icon": {
+            transform: "rotateZ(45) scale(1.5)"
+        }
     },
-    icon: {
+    icon: (rotation: number = 0) => {return{
         position: "absolute" as "absolute",
         right: "20px",
         lineHeight: "55px",
@@ -20,8 +25,9 @@ const style = {
         height: "55px",
         fontSize: "100px",
         color: "rgba(255,255,255,0.15)",
-        transition: "transform 1s ease-in"
-    },
+        transition: "transform 0.5s ease-in",
+        transform: `rotateZ(${rotation}deg)`
+    }},
     input: {
         height: "22px",
         width: "100%",
@@ -41,41 +47,41 @@ const style = {
 
 export interface SearchProps {
     onSearching: (value: string) => void;
-    onFound: (id: string, filename: string, title: string) => void;
+    onFound: (id: string, filename: string, title: string, thumbnail: string) => void;
 }
 
 export interface SearchState {
-    icon: {
-        transform: string
-    }
+    rotation: number;
 }
 
 export const Search = Radium(class extends React.Component<SearchProps, SearchState> {
     private waitTimer: number|null = null;
     private spinTimer: number|null = null;
-    private rotation = 0;
     
     constructor(props: SearchProps) {
         super(props);
         this.state = {
-            icon: {
-                transform: "rotateZ(0)"
-            }
+            rotation: 0
         };
     }
 
     spinIcon(to?: number) {
-        this.rotation = to || (this.rotation + 360);
         this.setState({
-            icon: {
-                transform: "rotateZ("+this.rotation+"deg)"
-            }
+            rotation: to !== undefined ? to : this.state.rotation + 360
         });
     }
 
-    async handleChange(e: {target: {value: string}}) {
-        const val = e.target.value;
+    async handleFocus(e: FocusEvent<HTMLInputElement>) {
+        this.spinIcon(-90);
+    }
 
+    async handleBlur(e: FocusEvent<HTMLInputElement>) {
+        this.spinIcon(0);
+    }
+
+    async handleChange(e: {target: any}) {
+        const val = e.target.value;
+        
         if (this.waitTimer !== null) {
             clearTimeout(this.waitTimer);
         }
@@ -85,12 +91,12 @@ export const Search = Radium(class extends React.Component<SearchProps, SearchSt
         })
 
         if (this.spinTimer) clearInterval(this.spinTimer);
-        this.spinTimer = setInterval(this.spinIcon.bind(this), 1000);
+        this.spinTimer = setInterval(this.spinIcon.bind(this), 500);
 
         try {
             this.props.onSearching(val);
             const info = await getInfo(val);
-            this.props.onFound(info.video_id, info.video_id, info.title);
+            this.props.onFound(info.video_id, info.video_id, info.title, info.thumbnail_url);
         } catch(err) {
         }
 
@@ -101,11 +107,13 @@ export const Search = Radium(class extends React.Component<SearchProps, SearchSt
     render() {
         return (
             <div style={style.search}>
-                <i style={[style.icon, this.state.icon]} className="fa fa-search" aria-hidden="true"></i>
+                <i style={style.icon(this.state.rotation)} className="fa fa-search" aria-hidden="true"></i>
                 <input 
                     placeholder="Youtube URL..."
                     style={style.input}
                     onChange={this.handleChange.bind(this)}
+                    onFocus={this.handleFocus.bind(this)}
+                    onBlur={this.handleBlur.bind(this)}
                 />
             </div>
         );
