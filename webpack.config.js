@@ -56,6 +56,7 @@ module.exports = {
         extractSass, extractHtml,
         new CopyWebpackPlugin([
             { from: 'node_modules/ffmpeg.js/ffmpeg-worker-mp4.js' },
+            { from: 'assets' }
         ]),
         new AsyncModulePlugin()
     ],
