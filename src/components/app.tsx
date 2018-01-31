@@ -4,7 +4,8 @@ import * as Radium from "radium";
 
 import { Header } from "./header";
 import { Search } from "./search";
-import { VideoList, VideoEntry } from "./videolist";
+import { VideoList } from "./videolist";
+import { VideoEntryProps, VideoEntry } from "./videoentry";
 
 const style = {
     container: {
@@ -38,7 +39,7 @@ const style = {
 }
 
 export interface AppState {
-    entries: VideoEntry[];
+    entries: VideoEntryProps[];
 }
 
 export const App = Radium(class extends React.Component<{}, AppState> {
@@ -73,7 +74,16 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                         onSearching={this.handleSearching.bind(this)}
                         onFound={this.handleFound.bind(this)}
                     />
-                    <VideoList entries={this.state.entries}/>
+                    <VideoList>
+                        { this.state.entries.map(entry =>
+                            <VideoEntry 
+                                id={entry.id} 
+                                title={entry.title} 
+                                filename={entry.filename} 
+                                thumbnail={entry.thumbnail} 
+                            />
+                        ) }
+                    </VideoList>
                 </div>
             </div>
         );
