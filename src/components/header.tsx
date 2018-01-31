@@ -13,7 +13,7 @@ const style = {
         marginRight: "-13px",
         height: "100%",
         width: "25%",
-        backgroundImage: "url(/img/Logo_250.png)",
+        backgroundImage: "url(img/Logo_250.png)",
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center"

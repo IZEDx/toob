@@ -31,7 +31,7 @@ const style = {
         display: "grid",
         gridTemplateColumns: "200px auto",
         gridTemplateRows: "75px auto 75px",
-        backgroundImage: "url(/img/Background_cropped.png",
+        backgroundImage: "url(img/Background_cropped.png",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "calc(0% - 200px) calc(100% + 200px)",
         backgroundSize: "contain",
