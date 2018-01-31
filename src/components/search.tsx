@@ -45,9 +45,16 @@ const style = {
     }
 }
 
+export interface SearchResult {
+    id: string;
+    filename: string;
+    title: string;
+    thumbnail: string;
+}
+
 export interface SearchProps {
     onSearching: (value: string) => void;
-    onFound: (id: string, filename: string, title: string, thumbnail: string) => void;
+    onFound: (result: SearchResult) => void;
 }
 
 export interface SearchState {
@@ -96,7 +103,12 @@ export const Search = Radium(class extends React.Component<SearchProps, SearchSt
         try {
             this.props.onSearching(val);
             const info = await getInfo(val);
-            this.props.onFound(info.video_id, info.video_id, info.title, info.thumbnail_url);
+            this.props.onFound({
+                id: info.video_id, 
+                filename: info.video_id,
+                title: info.title, 
+                thumbnail: info.thumbnail_url
+            });
         } catch(err) {
         }
 

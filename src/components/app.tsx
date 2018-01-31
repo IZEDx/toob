@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Radium from "radium";
 
 import { Header } from "./header";
-import { Search } from "./search";
+import { Search, SearchResult } from "./search";
 import { VideoList } from "./videolist";
 import { VideoEntryProps, VideoEntry } from "./videoentry";
 
@@ -54,13 +54,16 @@ export const App = Radium(class extends React.Component<{}, AppState> {
     handleSearching(value: string) {
     }
 
-    handleFound(id: string, filename: string, title: string, thumbnail: string) {
-        if ( this.state.entries.find(e => e.id === id) !== undefined ) {
+    handleFound(result: SearchResult) {
+        if ( this.state.entries.find(e => e.id === result.id) !== undefined ) {
             return;
         }
         const entries = this.state.entries.slice();
         entries.push({
-            id, filename, title, thumbnail
+            id: result.id, 
+            filename: result.filename, 
+            title: result.title, 
+            thumbnail: result.thumbnail
         });
         this.setState({entries});
     }
@@ -75,14 +78,16 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                         onFound={this.handleFound.bind(this)}
                     />
                     <VideoList>
-                        { this.state.entries.map(entry =>
-                            <VideoEntry 
-                                id={entry.id} 
+                        { this.state.entries.map(entry => {
+                            console.log(entry);
+                            return  <VideoEntry 
+                                key={entry.id}
+                                id={entry.id}
                                 title={entry.title} 
                                 filename={entry.filename} 
                                 thumbnail={entry.thumbnail} 
-                            />
-                        ) }
+                            />;
+                        } ) }
                     </VideoList>
                 </div>
             </div>
