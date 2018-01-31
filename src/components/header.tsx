@@ -42,12 +42,14 @@ export interface HeaderProps {
 export const Header = Radium(class extends React.Component<HeaderProps> {
 
     render() {
-        return <div style={style.header}>
+        return (
+            <div style={style.header}>
                 <div style={style.icon} />
                 <div style={style.title}>
                     {this.props.name}
                 </div>
-            </div>;
+            </div>
+        );
 
     }
 });
