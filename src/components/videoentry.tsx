@@ -199,10 +199,10 @@ export const VideoEntry = Radium(class extends React.Component<VideoEntryProps, 
                     {this.props.title}
                 </div>
                 <div style={style.buttonContainer}>
-                    { !this.state.download.hidden ? this.renderButton("download", "music") : undefined }
-                    { !this.state.convert.hidden ? this.renderButton("convert", "music", "rgb(200, 200, 50)") : undefined }
-                    { !this.state.saveMp3.hidden ? this.renderButton("saveMp3", "music", "rgb(200, 200, 50)") : undefined }
-                    { !this.state.saveMp4.hidden ? this.renderButton("saveMp4", "film", "rgb(50, 200, 50)") : undefined }
+                    { this.renderButton("download", "music") }
+                    { this.renderButton("convert", "music", "rgb(200, 200, 50)") }
+                    { this.renderButton("saveMp3", "music", "rgb(200, 200, 50)") }
+                    { this.renderButton("saveMp4", "film", "rgb(50, 200, 50)") }
                 </div>
             </div>
         );
