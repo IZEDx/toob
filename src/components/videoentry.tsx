@@ -85,10 +85,12 @@ export interface VideoEntryProps {
     thumbnail: string;
 }
 
-interface ButtonState {
-    hidden: boolean;
-    disabled: boolean;
-    text: string;
+class ButtonState {
+    constructor(
+        public hidden: boolean,
+        public disabled: boolean,
+        public text: string
+    ) {}
 }
 
 interface VideoEntryState {
@@ -99,7 +101,16 @@ interface VideoEntryState {
     saveMp3: ButtonState;
 }
 
-export const VideoEntry = Radium(class extends React.Component<VideoEntryProps, VideoEntryState> {
+export interface IVideoEntry extends React.Component<VideoEntryProps, VideoEntryState> {
+    video: Uint8Array;
+    audio: Uint8Array;
+    download(): Promise<void>;
+    convert(): Promise<void>;
+    saveMp3(): Promise<void>;
+    saveMp4(): Promise<void>;
+}
+
+export const VideoEntry = Radium(class extends React.Component<VideoEntryProps, VideoEntryState> implements IVideoEntry {
     video: Uint8Array = null as any;
     audio: Uint8Array = null as any;
 
@@ -108,101 +119,49 @@ export const VideoEntry = Radium(class extends React.Component<VideoEntryProps, 
 
         this.state = {
             status: VideoStatus.added,
-            download: {
-                disabled: false,
-                hidden: false,
-                text: `Download`
-            },
-            convert: {
-                disabled: false,
-                hidden: true,
-                text: `Convert to MP3`
-            },
-            saveMp4: {
-                disabled: false,
-                hidden: true,
-                text: `Save as MP4`
-            },
-            saveMp3: {
-                disabled: false,
-                hidden: true,
-                text: `Save as MP3`
-            },
+            download: new ButtonState(false, false, "Download"),
+            convert: new ButtonState(true, false, "Convert to MP3"),
+            saveMp3: new ButtonState(true, false, "Save as MP3"),
+            saveMp4: new ButtonState(true, false, "Save as MP4")
         };
     }
 
     async download() {
         this.setState({
-            download: {
-                disabled: true,
-                hidden: false,
-                text: "Downloading..."
-            }
+            download: new ButtonState(false, true, "Downloading...")
         });
         try {
             this.video = await downloadVideo(this.props.id);
             this.setState({
                 status: VideoStatus.downloaded,
-                download: {
-                    disabled: true,
-                    hidden: true,
-                    text: ""
-                },
-                convert: {
-                    disabled: false,
-                    hidden: false,
-                    text: "Convert to MP3"
-                },
-                saveMp4: {
-                    disabled: false,
-                    hidden: false,
-                    text: "Save as MP4"
-                }
+                download: new ButtonState(true, true, ""),
+                convert: new ButtonState(false, false, "Convert to MP3"),
+                saveMp4: new ButtonState(false, false, "Save as MP4")
             });
         } catch(err) {
             console.error(err);
             this.setState({
-                download: {
-                    disabled: false,
-                    hidden: false,
-                    text: "Download"
-                }
+                download: new ButtonState(false, false, "Download")
             });
         }
     }
 
     async convert() {
         this.setState({
-            convert: {
-                disabled: true,
-                hidden: false,
-                text: "Converting..."
-            }
+            convert: new ButtonState(false, true, "Converting...")
         });
         try {
             const ffmpeg = FFmpegWorker.singleton();
             this.audio = await ffmpeg.convertToMp3(this.video);
             this.setState({
                 status: VideoStatus.converted,
-                convert: {
-                    disabled: true,
-                    hidden: true,
-                    text: ""
-                },
-                saveMp3: {
-                    disabled: false,
-                    hidden: false,
-                    text: "Save as MP3"
-                }
+                convert: new ButtonState(true, true, ""),
+                saveMp3: new ButtonState(false, false, "Save as MP3")
             });
         } catch(err) {
             console.error(err);
             this.setState({
-                convert: {
-                    disabled: false,
-                    hidden: false,
-                    text: "Convert to MP3"
-                }
+                convert: new ButtonState(false, false, "Convert to MP3")
             });
         }
     }
@@ -215,74 +174,21 @@ export const VideoEntry = Radium(class extends React.Component<VideoEntryProps, 
         saveToFile(this.video, this.props.filename + ".mp4");
     }
 
-    private renderDownloadButton() {
-        if (!this.state.download.hidden) {
-            return (
-                <button
-                    key={this.props.id+"download"} 
-                    style={style.button()}
-                    onClick={() => this.download()}
-                    disabled={this.state.download.disabled}
-                >
-                    <i className="fa fa-download" aria-hidden="true"></i>
-                    &nbsp; {this.state.download.text}
-                </button>
-            );
-        } else {
-            return;
-        }
-    }
+    private renderButton(name: keyof VideoEntryState, icon: string, color?: string) {
+        const state = this.state[name];
+        if (!(state instanceof ButtonState) || state.hidden) return;
 
-    private renderConvertButton() {
-        if (!this.state.convert.hidden) {
-            return (
-                <button
-                    key={this.props.id+"convert"} 
-                    style={style.button("rgb(200, 200, 50)")}
-                    onClick={() => this.convert()}
-                    disabled={this.state.convert.disabled}
-                >
-                    <i className="fa fa-music" aria-hidden="true"></i>
-                    &nbsp; {this.state.convert.text}
-                </button>
-            );
-        } else {
-            return;
-        }
-    }
-
-    private renderSaveMp3Button() {
-        if (!this.state.saveMp3.hidden) {
-            return (
-                <button
-                    key={this.props.id+"saveMp3"} 
-                    style={style.button("rgb(200, 200, 50)")}
-                    onClick={() => this.saveMp3()}
-                    disabled={this.state.saveMp3.disabled}
-                >
-                    <i className="fa fa-music" aria-hidden="true"></i>
-                    &nbsp; {this.state.saveMp3.text}
-                </button>
-            );
-        }
-    }
-
-    private renderSaveMp4Button() {
-        if (!this.state.saveMp4.hidden) {
-            return (
-                <button
-                    key={this.props.id+"savemp4"} 
-                    style={style.button("rgb(50, 200, 50)")}
-                    onClick={() => this.saveMp4()}
-                    disabled={this.state.saveMp4.disabled}
-                >
-                    <i className="fa fa-film" aria-hidden="true"></i>
-                    &nbsp; {this.state.saveMp4.text}
-                </button>
-            );
-        } else {
-            return <div />
-        }
+        return (
+            <button
+                key={this.props.id+name} 
+                style={style.button(color)}
+                onClick={() => this[name]()}
+                disabled={state.disabled}
+            >
+                <i className={"fa fa-"+icon} aria-hidden="true"></i>
+                &nbsp; {state.text}
+            </button>
+        );
     }
 
     render() {
@@ -293,10 +199,10 @@ export const VideoEntry = Radium(class extends React.Component<VideoEntryProps, 
                     {this.props.title}
                 </div>
                 <div style={style.buttonContainer}>
-                    {this.renderDownloadButton()}
-                    {this.renderConvertButton()}
-                    {this.renderSaveMp3Button()}
-                    {this.renderSaveMp4Button()}
+                    { !this.state.download.hidden ? this.renderButton("download", "music") : undefined }
+                    { !this.state.convert.hidden ? this.renderButton("convert", "music", "rgb(200, 200, 50)") : undefined }
+                    { !this.state.saveMp3.hidden ? this.renderButton("saveMp3", "music", "rgb(200, 200, 50)") : undefined }
+                    { !this.state.saveMp4.hidden ? this.renderButton("saveMp4", "film", "rgb(50, 200, 50)") : undefined }
                 </div>
             </div>
         );
