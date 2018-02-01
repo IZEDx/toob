@@ -21,16 +21,14 @@ const style = {
     title: {
         display: "block",
         float: "left",
-        marginTop: "5px",
         height: "70px",
         width: "70%",
         textAlign: "center",
-        lineHeight: "75px",
-        fontSize: "45px",
-        fontFamily: "Ranga, cursive",
+        lineHeight: "70px",
+        fontSize: "33px",
+        fontFamily: "Dhurjati, sans-serif",
         color: "#ffffff",
-        verticalAlign: "middle",
-        fontVariant: "small-caps"
+        verticalAlign: "center"
     }
 }
 

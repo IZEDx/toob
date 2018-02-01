@@ -72,7 +72,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
         return (
             <div style={style.container}>
                 <div style={style.app}>
-                    <Header name="Loadtube" />
+                    <Header name="toob.host" />
                     <Search 
                         onSearching={this.handleSearching.bind(this)}
                         onFound={this.handleFound.bind(this)}
