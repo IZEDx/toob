@@ -19,7 +19,10 @@ const style = {
         display: "grid",
         gridTemplateColumns: "auto 1fr",
         gridTemplateRows: "100px",
-
+        transition: "background-color 0.2s",
+        ":hover": {
+            backgroundColor: "rgba(0,0,0,0.2)"
+        }
     },
     title: {
         fontSize: "20px",
@@ -28,7 +31,7 @@ const style = {
         lineHeight: "100px",
         verticalAlign: "center"
     },
-    background: (thumbnail: string) => {return{
+    background: (thumbnail: string, hover: boolean = false) => {return{
         zIndex: -1,
         position: "absolute" as "absolute",
         left: "0",
@@ -38,17 +41,13 @@ const style = {
         backgroundSize: "cover",
         backgroundPosition: "center center",
         backgroundImage: `url(${thumbnail})`,
-        filter: "blur(2px) brightness(70%) grayscale(30%)",
-        transition: "filter 0.2s",
-        opacity: 0.2,
-        ":hover": {
-            filter: "blur(20px) brightness(20%) grayscale(80%)"
-        }
+        filter: "blur(10px) brightness(70%) grayscale(40%)",
+        opacity: 0.2
     }},
     buttonContainer: {
         justifySelf: "right"
     },
-    button: () => {return{
+    button: (color: string = "#ffffff") => {return{
         border: "none",
         outline: "none",
         backgroundColor: "transparent",
@@ -56,7 +55,7 @@ const style = {
         height: "100px",
         margin: "none",
         padding: "10px 10px",
-        color: "#ffffff",
+        color: color,
         fontSize: "20px",
         textAlign: "center",
         boxSizing: "border-box",
@@ -239,7 +238,7 @@ export const VideoEntry = Radium(class extends React.Component<VideoEntryProps, 
             return (
                 <button
                     key={this.props.id+"convert"} 
-                    style={style.button()}
+                    style={style.button("rgb(200, 200, 50)")}
                     onClick={() => this.convert()}
                     disabled={this.state.convert.disabled}
                 >
@@ -257,7 +256,7 @@ export const VideoEntry = Radium(class extends React.Component<VideoEntryProps, 
             return (
                 <button
                     key={this.props.id+"saveMp3"} 
-                    style={style.button()}
+                    style={style.button("rgb(200, 200, 50)")}
                     onClick={() => this.saveMp3()}
                     disabled={this.state.saveMp3.disabled}
                 >
@@ -273,7 +272,7 @@ export const VideoEntry = Radium(class extends React.Component<VideoEntryProps, 
             return (
                 <button
                     key={this.props.id+"savemp4"} 
-                    style={style.button()}
+                    style={style.button("rgb(50, 200, 50)")}
                     onClick={() => this.saveMp4()}
                     disabled={this.state.saveMp4.disabled}
                 >
