@@ -13,8 +13,19 @@ const style = {
         width: "100vw",
         height: "100vh",
         transition: "padding 0.4s",
-        padding: "75px 100px",
-        boxSizing: "border-box"
+        paddingLeft: "100px",
+        paddingTop: "75px",
+        paddingRight: "100px",
+        paddingBottom: "75px",
+        boxSizing: "border-box",
+        "@media screen and (max-height: 750px)": {
+            paddingTop: "0px",
+            paddingBottom: "0px"
+        },
+        "@media screen and (max-width: 850px)": {
+            paddingLeft: "0px",
+            paddingRight: "0px"
+        }
     },
     app: {
         minWidth: "500px",
@@ -70,7 +81,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
 
     render() {
         return (
-            <div style={style.container}>
+            <Radium.StyleRoot style={style.container}>
                 <div style={style.app}>
                     <Header name="toob.host" />
                     <Search 
@@ -90,7 +101,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                         } ) }
                     </VideoList>
                 </div>
-            </div>
+            </Radium.StyleRoot>
         );
 
     }
