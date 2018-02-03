@@ -1,7 +1,4 @@
 
-import "./index.html";
-import "./sass/main.sass";
-
 import * as React from "react";
 import { render } from "react-dom";
 

@@ -5,7 +5,7 @@ import { getInfo } from "ytdl-core";
 
 export async function downloadVideo(id: string): Promise<Uint8Array> {
     const info = await getInfo(id);
-    const format = info.formats.find(format => format.audioBitrate >= 128 && format.container === "mp4");
+    const format = info.formats.sort((a, b) => a.audioBitrate > b.audioBitrate ? -1 : 1)[0];
 
     if (format === undefined) {
         throw new Error("Could not find viable format.");

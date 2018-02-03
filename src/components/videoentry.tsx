@@ -4,6 +4,7 @@ import * as Radium from "radium";
 import { downloadVideo } from "../libs/youtube";
 import { FFmpegWorker } from "../libs/ffmpeg";
 import { saveToFile } from "../libs/utils";
+import { SearchResult } from "./search";
 
 const style = {
     entry: {
@@ -78,13 +79,6 @@ enum VideoStatus {
     added, downloaded, converted
 }
 
-export interface VideoEntryProps {
-    id: string;
-    title: string;
-    filename: string;
-    thumbnail: string;
-}
-
 class ButtonState {
     constructor(
         public hidden: boolean,
@@ -101,7 +95,7 @@ interface VideoEntryState {
     saveMp3: ButtonState;
 }
 
-export interface IVideoEntry extends React.Component<VideoEntryProps, VideoEntryState> {
+export interface IVideoEntry extends React.Component<SearchResult, VideoEntryState> {
     video: Uint8Array;
     audio: Uint8Array;
     download(): Promise<void>;
@@ -110,11 +104,11 @@ export interface IVideoEntry extends React.Component<VideoEntryProps, VideoEntry
     saveMp4(): Promise<void>;
 }
 
-export const VideoEntry = Radium(class extends React.Component<VideoEntryProps, VideoEntryState> implements IVideoEntry {
+export const VideoEntry = Radium(class extends React.Component<SearchResult, VideoEntryState> implements IVideoEntry {
     video: Uint8Array = null as any;
     audio: Uint8Array = null as any;
 
-    constructor(props: VideoEntryProps) {
+    constructor(props: SearchResult) {
         super(props);
 
         this.state = {

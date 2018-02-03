@@ -4,7 +4,6 @@ import * as Radium from "radium";
 
 const style = {
     header: {
-        borderRight: "solid 1px rgba(0,0,0,0.3)",
         userSelect: "none",
     },
     icon: {

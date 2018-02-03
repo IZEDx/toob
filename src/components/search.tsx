@@ -10,8 +10,8 @@ const style = {
         height: "55px",
         backgroundColor: "rgba(255, 255, 255, 0.05)",
         padding: "10px 30px",
-        borderLeft: "solid 1.5px rgba(0, 0, 0, 0.5)",
-        borderBottom: "solid 1.5px rgba(0, 0, 0, 0.5)",
+        borderLeft: "solid 1px rgba(0, 0, 0, 0.4)",
+        borderBottom: "solid 1px rgba(0, 0, 0, 0.4)",
         overflow: "hidden" as "hidden",
         ":focus>.icon": {
             transform: "rotateZ(45) scale(1.5)"
@@ -50,6 +50,10 @@ export interface SearchResult {
     filename: string;
     title: string;
     thumbnail: string;
+    file: {
+        url: string,
+        format: string
+    }
 }
 
 export interface SearchProps {
@@ -103,13 +107,22 @@ export const Search = Radium(class extends React.Component<SearchProps, SearchSt
         try {
             this.props.onSearching(val);
             const info = await getInfo(val);
+            const format = info.formats.sort((a, b) => a.audioBitrate > b.audioBitrate ? -1 : 1)[0];
+            if (format === undefined) {
+                throw new Error("Video not downloadable.");
+            }
             this.props.onFound({
                 id: info.video_id, 
                 filename: info.video_id,
                 title: info.title, 
-                thumbnail: info.thumbnail_url
+                thumbnail: info.thumbnail_url,
+                file: {
+                    url: format.url,
+                    format: format.container
+                }
             });
         } catch(err) {
+            console.error("Error getting info from YouTube: ", err);
         }
 
         if (this.spinTimer) clearInterval(this.spinTimer);
