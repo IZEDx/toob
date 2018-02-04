@@ -18,13 +18,12 @@ const style = {
         paddingRight: "100px",
         paddingBottom: "75px",
         boxSizing: "border-box",
-        "@media screen and (max-height: 750px)": {
+        "@media screen and (max-height: 980px)": {
             paddingTop: "0px",
             paddingBottom: "0px"
         },
-        "@media screen and (max-width: 850px)": {
-            paddingLeft: "0px",
-            paddingRight: "0px"
+        "@media screen and (max-width: 1080px)": {
+            padding: 0
         }
     },
     app: {
@@ -77,6 +76,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
         if ( this.state.entries.find(e => e.id === result.id) !== undefined ) {
             return;
         }
+        console.log(result);
         const entries = this.state.entries.slice();
         entries.push(result);
         this.setState({entries});

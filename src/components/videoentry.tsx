@@ -17,9 +17,11 @@ const style = {
         borderTop: "solid 1px rgba(0, 0, 0, 0.3)",
         borderBottom: "solid 1px rgba(0, 0, 0, 0.3)",
         overflow: "hidden" as "hidden",
-        display: "grid",
-        gridTemplateColumns: "auto 1fr",
-        gridTemplateRows: "100px",
+        display: "flex",
+        flexDirection: "row" as "row",
+        flexWrap: "nowrap" as "nowrap",
+        flexAlign: "stretch" as "stretch",
+        justifyContent: "stretch" as "stretch",
         transition: "background-color 0.2s",
         ":hover": {
             backgroundColor: "rgba(0,0,0,0.2)"
@@ -30,7 +32,9 @@ const style = {
         fontFamily: "Montserrat, bold",
         textAlign: "left",
         lineHeight: "100px",
-        verticalAlign: "center"
+        verticalAlign: "center",
+        flexShrink: 1,
+        flexGrow: 1
     },
     background: (thumbnail: string, hover: boolean = false) => {return{
         zIndex: -1,
@@ -46,7 +50,7 @@ const style = {
         opacity: 0.2
     }},
     buttonContainer: {
-        justifySelf: "right"
+        flexShrink: 0
     },
     button: (color: string = "#ffffff") => {return{
         border: "none",
@@ -72,7 +76,13 @@ const style = {
             backgroundColor: "transparent",
             cursor: "default"
         }
-    }}
+    }},
+    buttonText: {
+        marginLeft: "5px",
+        "@media screen and (max-width: 1080px)": {
+            display: "none"
+        }
+    }
 }
 
 export enum VideoStatus {
@@ -200,7 +210,7 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
                 disabled={state.disabled}
             >
                 <i className={"fa fa-"+icon} aria-hidden="true"></i>
-                &nbsp; {state.text}
+                <span style={style.buttonText}>{state.text}</span>
             </button>
         );
     }

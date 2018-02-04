@@ -111,6 +111,8 @@ export const Search = Radium(class extends React.Component<SearchProps, SearchSt
             if (format === undefined) {
                 throw new Error("Video not downloadable.");
             }
+            console.log(info.formats);
+            console.log(format);
             this.props.onFound({
                 id: info.video_id, 
                 filename: info.video_id,
