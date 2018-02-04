@@ -75,7 +75,7 @@ const style = {
     }}
 }
 
-enum VideoStatus {
+export enum VideoStatus {
     added, downloaded, converted
 }
 
@@ -85,6 +85,10 @@ class ButtonState {
         public disabled: boolean,
         public text: string
     ) {}
+}
+
+interface VideoEntryProps {
+    onStatusUpdate?: (video: IVideoEntry, status: VideoStatus) => void;
 }
 
 interface VideoEntryState {
@@ -104,11 +108,11 @@ export interface IVideoEntry extends React.Component<SearchResult, VideoEntrySta
     saveMp4(): Promise<void>;
 }
 
-export const VideoEntry = Radium(class extends React.Component<SearchResult, VideoEntryState> implements IVideoEntry {
+export const VideoEntry = Radium(class extends React.Component<SearchResult&VideoEntryProps, VideoEntryState> implements IVideoEntry {
     video: Uint8Array = null as any;
     audio: Uint8Array = null as any;
 
-    constructor(props: SearchResult) {
+    constructor(props: SearchResult&VideoEntryProps) {
         super(props);
 
         this.state = {
@@ -120,13 +124,29 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult, Vid
         };
     }
 
+    componentDidMount() {
+        if ( this.props.onStatusUpdate ) {
+            this.props.onStatusUpdate(this, this.state.status);
+        }
+    }
+
+    private updateState(state: any): Promise<void> {
+        return new Promise((resolve, reject) => 
+            this.setState(state, () => {
+                if ( this.props.onStatusUpdate !== undefined && state.status !== undefined ) {
+                    this.props.onStatusUpdate(this, state.status);
+                }
+                resolve();
+            }));
+    }
+
     async download() {
-        this.setState({
+        this.updateState({
             download: new ButtonState(false, true, "Downloading...")
         });
         try {
             this.video = await downloadVideo(this.props.id);
-            this.setState({
+            this.updateState({
                 status: VideoStatus.downloaded,
                 download: new ButtonState(true, true, ""),
                 convert: new ButtonState(false, false, "Convert to MP3"),
@@ -134,27 +154,27 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult, Vid
             });
         } catch(err) {
             console.error(err);
-            this.setState({
+            this.updateState({
                 download: new ButtonState(false, false, "Download")
             });
         }
     }
 
     async convert() {
-        this.setState({
+        this.updateState({
             convert: new ButtonState(false, true, "Converting...")
         });
         try {
             const ffmpeg = FFmpegWorker.singleton();
             this.audio = await ffmpeg.convertToMp3(this.video);
-            this.setState({
+            this.updateState({
                 status: VideoStatus.converted,
                 convert: new ButtonState(true, true, ""),
                 saveMp3: new ButtonState(false, false, "Save as MP3")
             });
         } catch(err) {
             console.error(err);
-            this.setState({
+            this.updateState({
                 convert: new ButtonState(false, false, "Convert to MP3")
             });
         }

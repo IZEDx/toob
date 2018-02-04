@@ -5,7 +5,7 @@ import * as Radium from "radium";
 import { Header } from "./header";
 import { Search, SearchResult } from "./search";
 import { VideoList } from "./videolist";
-import { VideoEntry } from "./videoentry";
+import { VideoEntry, IVideoEntry, VideoStatus } from "./videoentry";
 
 const style = {
     container: {
@@ -51,6 +51,10 @@ const style = {
 
 export interface AppState {
     entries: SearchResult[];
+    settings: {
+        autodownload: boolean;
+        autoconvert: boolean;
+    }
 }
 
 export const App = Radium(class extends React.Component<{}, AppState> {
@@ -58,7 +62,11 @@ export const App = Radium(class extends React.Component<{}, AppState> {
     constructor(props: {}) {
         super(props);
         this.state = {
-            entries: []
+            entries: [],
+            settings: {
+                autodownload: true,
+                autoconvert: true
+            }
         }
     }
 
@@ -74,6 +82,14 @@ export const App = Radium(class extends React.Component<{}, AppState> {
         this.setState({entries});
     }
 
+    handleStatusUpdate(video: IVideoEntry, status: VideoStatus) {
+        switch (status) {
+            case VideoStatus.added: this.state.settings.autodownload && video.download(); break;
+            case VideoStatus.downloaded: this.state.settings.autoconvert && video.convert(); break;
+            default: break;
+        }
+    }
+
     render() {
         return (
             <Radium.StyleRoot style={style.container}>
@@ -87,11 +103,13 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                         { this.state.entries.map(entry => 
                             <VideoEntry 
                                 key={entry.id}
+                                ref={entry.id}
                                 id={entry.id}
                                 title={entry.title} 
                                 filename={entry.filename} 
                                 thumbnail={entry.thumbnail}
                                 file={entry.file} 
+                                onStatusUpdate={this.handleStatusUpdate.bind(this)}
                             />
                         ) }
                     </VideoList>
