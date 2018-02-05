@@ -1,9 +1,12 @@
 
 import * as React from "react";
 import * as Radium from "radium";
+import * as sanitize from "sanitize-filename";
+
 import { downloadVideo } from "../libs/youtube";
 import { FFmpegWorker } from "../libs/ffmpeg";
 import { saveToFile } from "../libs/utils";
+import { parse, IParseResult } from "../libs/parser"; 
 import { SearchResult } from "./search";
 
 const style = {
@@ -28,13 +31,18 @@ const style = {
         }
     },
     title: {
-        fontSize: "20px",
+        fontSize: "22px",
         fontFamily: "Montserrat, bold",
         textAlign: "left",
         lineHeight: "100px",
         verticalAlign: "center",
         flexShrink: 1,
         flexGrow: 1
+    },
+    interprets: {
+        fontSize: "17px",
+        marginRight: "10px",
+        opacity: 0.8
     },
     background: (thumbnail: string, hover: boolean = false) => {return{
         zIndex: -1,
@@ -121,6 +129,8 @@ export interface IVideoEntry extends React.Component<SearchResult, VideoEntrySta
 export const VideoEntry = Radium(class extends React.Component<SearchResult&VideoEntryProps, VideoEntryState> implements IVideoEntry {
     video: Uint8Array = null as any;
     audio: Uint8Array = null as any;
+    private titlestring = "";
+    title: IParseResult|string = "";
 
     constructor(props: SearchResult&VideoEntryProps) {
         super(props);
@@ -191,11 +201,19 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
     }
 
     async saveMp3() {
-        saveToFile(this.audio, this.props.filename + ".mp3");
+        if ( typeof this.title === "string" ) {
+            saveToFile(this.audio, sanitize(this.props.filename + ".mp3"));
+        } else {
+            const tags = this.title.tags
+                .filter(s => s.toLowerCase().indexOf("remix") !== -1)
+                .map(s => `(${s})`)
+                .join(" ");
+            saveToFile(this.audio, sanitize(`${this.title.interprets.join(" & ")} - ${(this.title.title + " " + tags).trim()}.mp3`));
+        }
     }
 
     async saveMp4() {
-        saveToFile(this.video, this.props.filename + ".mp4");
+        saveToFile(this.video, sanitize(this.props.filename) + ".mp4");
     }
 
     private renderButton(name: keyof VideoEntryState, icon: string, color?: string) {
@@ -215,13 +233,34 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
         );
     }
 
+    renderTitle() {
+        if (typeof this.title !== "string") {
+            return (
+                <div style={style.title}> 
+                    <span style={style.interprets}>
+                        {this.title.interprets.join(", ")}
+                    </span>
+                    {this.title.title}
+                </div>
+            );
+        } else {
+            return (
+                <div style={style.title}>
+                    {this.title}
+                </div>
+            );
+        }
+    }
+
     render() {
+        if ( this.props.title !== this.titlestring ) {
+            this.titlestring = this.props.title;
+            this.title = parse(this.titlestring);
+        }
         return (
             <div style={style.entry}>
                 <div style={style.background(this.props.thumbnail)} />
-                <div style={style.title}>
-                    {this.props.title}
-                </div>
+                { this.renderTitle() }
                 <div style={style.buttonContainer}>
                     { this.renderButton("download", "music") }
                     { this.renderButton("convert", "music", "rgb(200, 200, 50)") }
