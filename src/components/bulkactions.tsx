@@ -86,13 +86,44 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
     componentDidMount() {
     }
 
-    saveMp3() {
+    async saveMp3() {
+        this.setState({
+            saveMp3: new ButtonState(false, true, "Preparing...")
+        });
+        const zip = new JSZip();
+        const promises : Promise<void>[] = [];
+        for (const e of this.props.entries) {
+            const entry = e;
+            promises.push((async () => {
+                const el: IVideoEntry = this.props.elements[entry.id];
+                if (el.state.status < VideoStatus.downloaded) {
+                    await el.download();
+                }
+                if (el.state.status < VideoStatus.converted) {
+                    await el.convert();
+                }
+                zip.file(sanitize(entry.title) + ".mp3", el.audio);
+            })());
+        }
+        await Promise.all(promises);
+        this.setState({
+            saveMp3: new ButtonState(false, true, "Zipping...")
+        });
+        const archive = await zip.generateAsync({type:"blob"});
+        saveToFile(archive, "toobmp3.zip");
+        this.setState({
+            saveMp3: new ButtonState(false, false, "Save all as MP3")
+        });
     }
 
     async saveMp4() {
+        this.setState({
+            saveMp4: new ButtonState(false, true, "Preparing...")
+        });
         const zip = new JSZip();
         const promises : Promise<void>[] = [];
-        for (const entry of this.props.entries) {
+        for (const e of this.props.entries) {
+            const entry = e;
             promises.push((async () => {
                 const el: IVideoEntry = this.props.elements[entry.id];
                 if (el.state.status < VideoStatus.downloaded) {
@@ -102,8 +133,14 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
             })());
         }
         await Promise.all(promises);
+        this.setState({
+            saveMp4: new ButtonState(false, true, "Zipping...")
+        });
         const archive = await zip.generateAsync({type:"blob"});
-        saveToFile(archive, "toob.zip");
+        saveToFile(archive, "toobmp4.zip");
+        this.setState({
+            saveMp4: new ButtonState(false, false, "Save all as MP4")
+        });
     }
 
     private renderButton(name: keyof BulkActionsState, icon: string, color?: string, disabled?: boolean) {
