@@ -20,8 +20,6 @@ export const Checkbox = Radium(class extends React.Component<CheckboxProps, Chec
         this.state = {
             checked: !!props.checked
         };
-
-        console.log(this.state);
     }
 
     getStyle() {

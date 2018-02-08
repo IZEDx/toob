@@ -84,7 +84,6 @@ export const App = Radium(class extends React.Component<{}, AppState> {
         if ( this.state.entries.find(e => e.id === result.id) !== undefined ) {
             return;
         }
-        console.log(result);
         const entries = this.state.entries.slice();
         entries.push(result);
         this.setState({entries});
@@ -100,7 +99,6 @@ export const App = Radium(class extends React.Component<{}, AppState> {
 
     changeSetting<T extends keyof AppSettings>(setting: T) {
         return (checked: boolean) => {
-            console.log(setting, checked);
             const settings = Object.assign({}, this.state.settings);
             settings[setting] = checked;
             this.setState({ settings });
