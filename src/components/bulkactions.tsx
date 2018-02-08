@@ -1,10 +1,16 @@
 
 import * as React from "react";
 import * as Radium from "radium";
+import * as JSZip from "jszip";
+import * as sanitize from "sanitize-filename";
+
 import { SearchResult } from "./search";
+import { IVideoEntry, VideoStatus } from "./videoentry";
+import { saveToFile } from "../libs/utils";
 
 interface BulkActionsProps {
     entries: SearchResult[];
+    elements: IVideoEntry[]; 
 }
 
 class ButtonState {
@@ -83,7 +89,21 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
     saveMp3() {
     }
 
-    saveMp4() {
+    async saveMp4() {
+        const zip = new JSZip();
+        const promises : Promise<void>[] = [];
+        for (const entry of this.props.entries) {
+            promises.push((async () => {
+                const el: IVideoEntry = this.props.elements[entry.id];
+                if (el.state.status < VideoStatus.downloaded) {
+                    await el.download();
+                }
+                zip.file(sanitize(entry.title) + ".mp4", el.video);
+            })());
+        }
+        await Promise.all(promises);
+        const archive = await zip.generateAsync({type:"blob"});
+        saveToFile(archive, "toob.zip");
     }
 
     private renderButton(name: keyof BulkActionsState, icon: string, color?: string, disabled?: boolean) {
@@ -111,7 +131,6 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
             <div style={style.container}>
                 { this.renderButton("saveMp3", "music", "rgb(200, 200, 50)", disabled) }
                 { this.renderButton("saveMp4", "film", "rgb(50, 200, 50)", disabled) }
-                { this.props.children }
             </div>
         );
     }

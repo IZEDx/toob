@@ -112,6 +112,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
     }
 
     render() {
+        const videoentries: IVideoEntry[] = []
         return (
             <Radium.StyleRoot style={style.container}>
                 <Radium.StyleRoot style={style.app}>
@@ -129,7 +130,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                         { this.state.entries.map(entry => 
                             <VideoEntry 
                                 key={entry.id}
-                                ref={entry.id}
+                                ref={el => videoentries[entry.id] = el}
                                 id={entry.id}
                                 title={entry.title} 
                                 filename={entry.title} 
@@ -139,8 +140,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                             />
                         ) }
                     </VideoList>
-                    <BulkActions entries={this.state.entries}>
-                    </BulkActions>
+                    <BulkActions entries={this.state.entries} elements={videoentries} />
                 </Radium.StyleRoot>
             </Radium.StyleRoot>
         );
