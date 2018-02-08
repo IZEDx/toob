@@ -7,6 +7,7 @@ import { Search, SearchResult } from "./search";
 import { VideoList } from "./videolist";
 import { VideoEntry, IVideoEntry, VideoStatus } from "./videoentry";
 import { Checkbox } from "./checkbox";
+import { BulkActions } from "./bulkactions";
 
 const style = {
     container: {
@@ -19,11 +20,11 @@ const style = {
         paddingRight: "100px",
         paddingBottom: "75px",
         boxSizing: "border-box",
-        "@media screen and (max-height: 980px)": {
+        "@media screen and (max-height: 780px)": {
             paddingTop: "0px",
             paddingBottom: "0px"
         },
-        "@media screen and (max-width: 1080px)": {
+        "@media screen and (max-width: 880px)": {
             padding: 0
         }
     },
@@ -46,6 +47,9 @@ const style = {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "calc(0% - 200px) calc(100% + 200px)",
         backgroundSize: "contain",
+        "@media screen and (max-width: 880px)": {
+            gridTemplateColumns: "110px auto",
+        }
     },
     settings: {
         display: "flex" as "flex",
@@ -68,11 +72,12 @@ export const App = Radium(class extends React.Component<{}, AppState> {
 
     constructor(props: {}) {
         super(props);
+
         this.state = {
             entries: [],
             settings: {
-                autodownload: true,
-                autoconvert: true
+                autodownload: localStorage.getItem("autodownload") === "true",
+                autoconvert: localStorage.getItem("autoconvert") === "true"
             }
         }
     }
@@ -101,6 +106,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
         return (checked: boolean) => {
             const settings = Object.assign({}, this.state.settings);
             settings[setting] = checked;
+            localStorage.setItem(setting, ""+checked);
             this.setState({ settings });
         }
     }
@@ -108,8 +114,8 @@ export const App = Radium(class extends React.Component<{}, AppState> {
     render() {
         return (
             <Radium.StyleRoot style={style.container}>
-                <div style={style.app}>
-                    <Header name="toob.host" />
+                <Radium.StyleRoot style={style.app}>
+                    <Header>toob.host</Header>
                     <Search 
                         onSearching={this.handleSearching.bind(this)}
                         onFound={this.handleFound.bind(this)}
@@ -133,7 +139,9 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                             />
                         ) }
                     </VideoList>
-                </div>
+                    <BulkActions entries={this.state.entries}>
+                    </BulkActions>
+                </Radium.StyleRoot>
             </Radium.StyleRoot>
         );
 
