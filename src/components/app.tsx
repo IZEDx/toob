@@ -6,6 +6,7 @@ import { Header } from "./header";
 import { Search, SearchResult } from "./search";
 import { VideoList } from "./videolist";
 import { VideoEntry, IVideoEntry, VideoStatus } from "./videoentry";
+import { Checkbox } from "./checkbox";
 
 const style = {
     container: {
@@ -40,20 +41,27 @@ const style = {
         boxShadow: "0px 5px 20px -6px rgba(0, 0, 0, 0.4)",
         display: "grid",
         gridTemplateColumns: "200px auto",
-        gridTemplateRows: "75px auto 75px",
+        gridTemplateRows: "75px 35px auto 75px",
         backgroundImage: "url(./img/Background_cropped.png",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "calc(0% - 200px) calc(100% + 200px)",
         backgroundSize: "contain",
+    },
+    settings: {
+        display: "flex" as "flex",
+        justifyContent: "flex-end" as "flex-end",
+        gridColumn: "1/span 2",
     }
+}
+
+interface AppSettings {
+    autodownload: boolean;
+    autoconvert: boolean;
 }
 
 export interface AppState {
     entries: SearchResult[];
-    settings: {
-        autodownload: boolean;
-        autoconvert: boolean;
-    }
+    settings: AppSettings;
 }
 
 export const App = Radium(class extends React.Component<{}, AppState> {
@@ -90,6 +98,15 @@ export const App = Radium(class extends React.Component<{}, AppState> {
         }
     }
 
+    changeSetting<T extends keyof AppSettings>(setting: T) {
+        return (checked: boolean) => {
+            console.log(setting, checked);
+            const settings = Object.assign({}, this.state.settings);
+            settings[setting] = checked;
+            this.setState({ settings });
+        }
+    }
+
     render() {
         return (
             <Radium.StyleRoot style={style.container}>
@@ -99,6 +116,11 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                         onSearching={this.handleSearching.bind(this)}
                         onFound={this.handleFound.bind(this)}
                     />
+                    <div style={style.settings}>
+                        <Checkbox label="Auto-Convert" checked={this.state.settings.autoconvert} onChanged={this.changeSetting.bind(this)("autoconvert")} />
+                        <div style={{width: 20}} />
+                        <Checkbox label="Auto-Download" checked={this.state.settings.autodownload} onChanged={this.changeSetting.bind(this)("autodownload")} />
+                    </div>
                     <VideoList>
                         { this.state.entries.map(entry => 
                             <VideoEntry 
