@@ -8,6 +8,7 @@ import { FFmpegWorker } from "../libs/ffmpeg";
 import { saveToFile } from "../libs/utils";
 import { parse, IParseResult } from "../libs/parser"; 
 import { SearchResult } from "./search";
+import { Button } from "./button";
 
 const style = {
     entry: {
@@ -164,16 +165,20 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
         this.updateState({
             download: new ButtonState(false, true, "Downloading...")
         });
+        
         try {
             this.video = await downloadVideo(this.props.id);
+
             this.updateState({
                 status: VideoStatus.downloaded,
                 download: new ButtonState(true, true, ""),
                 convert: new ButtonState(false, false, "Convert to MP3"),
                 saveMp4: new ButtonState(false, false, "Save as MP4")
             });
+
         } catch(err) {
             console.error(err);
+
             this.updateState({
                 download: new ButtonState(false, false, "Download")
             });
@@ -184,16 +189,20 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
         this.updateState({
             convert: new ButtonState(false, true, "Converting...")
         });
+
         try {
             const ffmpeg = FFmpegWorker.singleton();
             this.audio = await ffmpeg.convertToMp3(this.video);
+
             this.updateState({
                 status: VideoStatus.converted,
                 convert: new ButtonState(true, true, ""),
                 saveMp3: new ButtonState(false, false, "Save as MP3")
             });
+
         } catch(err) {
             console.error(err);
+            
             this.updateState({
                 convert: new ButtonState(false, false, "Convert to MP3")
             });
@@ -202,35 +211,22 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
 
     async saveMp3() {
         if ( typeof this.title === "string" ) {
+
             saveToFile(this.audio, sanitize(this.props.filename + ".mp3"));
+
         } else {
+            
             const tags = this.title.tags
                 .filter(s => s.toLowerCase().indexOf("remix") !== -1)
                 .map(s => `(${s})`)
                 .join(" ");
+
             saveToFile(this.audio, sanitize(`${this.title.interprets.join(" & ")} - ${(this.title.title + " " + tags).trim()}.mp3`));
         }
     }
 
     async saveMp4() {
         saveToFile(this.video, sanitize(this.props.filename) + ".mp4");
-    }
-
-    private renderButton(name: keyof VideoEntryState, icon: string, color?: string) {
-        const state = this.state[name];
-        if (!(state instanceof ButtonState) || state.hidden) return;
-
-        return (
-            <button
-                key={this.props.id+name} 
-                style={style.button(color)}
-                onClick={() => this[name]()}
-                disabled={state.disabled}
-            >
-                <i className={"fa fa-"+icon} aria-hidden="true"></i>
-                <span style={style.buttonText}>{state.text}</span>
-            </button>
-        );
     }
 
     renderTitle() {
@@ -262,10 +258,41 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
                 <div style={style.background(this.props.thumbnail)} />
                 { this.renderTitle() }
                 <div style={style.buttonContainer}>
-                    { this.renderButton("download", "music") }
-                    { this.renderButton("convert", "music", "rgb(200, 200, 50)") }
-                    { this.renderButton("saveMp3", "music", "rgb(200, 200, 50)") }
-                    { this.renderButton("saveMp4", "film", "rgb(50, 200, 50)") }
+                    <Button 
+                        icon="download" 
+                        onClick={this.download.bind(this)} 
+                        disabled={this.state.download.disabled} 
+                        hidden={this.state.download.hidden}
+                    >
+                        { this.state.download.text }
+                    </Button>
+                    <Button 
+                        icon="music" 
+                        color="rgb(200, 200, 50)"
+                        onClick={this.convert.bind(this)} 
+                        disabled={this.state.convert.disabled} 
+                        hidden={this.state.convert.hidden}
+                    >
+                        { this.state.convert.text }
+                    </Button>
+                    <Button 
+                        icon="music" 
+                        color="rgb(200, 200, 50)"
+                        onClick={this.saveMp3.bind(this)} 
+                        disabled={this.state.saveMp3.disabled} 
+                        hidden={this.state.saveMp3.hidden}
+                    >
+                        { this.state.saveMp3.text }
+                    </Button>
+                    <Button 
+                        icon="film" 
+                        color="rgb(50, 200, 50)"
+                        onClick={this.saveMp4.bind(this)} 
+                        disabled={this.state.saveMp4.disabled} 
+                        hidden={this.state.saveMp4.hidden}
+                    >
+                        { this.state.saveMp4.text }
+                    </Button>
                 </div>
             </div>
         );
