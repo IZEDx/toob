@@ -133,7 +133,6 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                                 ref={el => videoentries[entry.id] = el}
                                 id={entry.id}
                                 title={entry.title} 
-                                filename={entry.title} 
                                 thumbnail={entry.thumbnail}
                                 file={entry.file} 
                                 onStatusUpdate={this.handleStatusUpdate.bind(this)}

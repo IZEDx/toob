@@ -3,9 +3,8 @@ import * as React from "react";
 import * as Radium from "radium";
 import * as sanitize from "sanitize-filename";
 
-import { downloadVideo } from "../libs/youtube";
 import { FFmpegWorker } from "../libs/ffmpeg";
-import { saveToFile } from "../libs/utils";
+import { saveToFile, downloadFile } from "../libs/utils";
 import { parse, IParseResult } from "../libs/parser"; 
 import { SearchResult } from "./search";
 import { Button } from "./button";
@@ -58,6 +57,17 @@ const style = {
         filter: "blur(10px) brightness(70%) grayscale(40%)",
         opacity: 0.2
     }},
+    progressbar: (progress: number) => {return{
+        zIndex: 0,
+        position: "absolute" as "absolute",
+        left: "0",
+        bottom: "0",
+        width: progress+"%",
+        height: "5px",
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        filter: "blur(3px)",
+        transition: "width 0.1s"
+    }},
     buttonContainer: {
         flexShrink: 0
     },
@@ -95,7 +105,7 @@ const style = {
 }
 
 export enum VideoStatus {
-    added, downloaded, converted
+    added, downloaded, converting, converted
 }
 
 class ButtonState {
@@ -113,9 +123,9 @@ interface VideoEntryProps {
 interface VideoEntryState {
     status: VideoStatus;
     download: ButtonState;
-    convert: ButtonState;
     saveMp4: ButtonState;
     saveMp3: ButtonState;
+    downloadprogress: number;
 }
 
 export interface IVideoEntry extends React.Component<SearchResult, VideoEntryState> {
@@ -131,6 +141,7 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
     video: Uint8Array = null as any;
     audio: Uint8Array = null as any;
     private titlestring = "";
+    private onStatusUpdate = () => {};
     title: IParseResult|string = "";
 
     constructor(props: SearchResult&VideoEntryProps) {
@@ -139,9 +150,9 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
         this.state = {
             status: VideoStatus.added,
             download: new ButtonState(false, false, "Download"),
-            convert: new ButtonState(true, false, "Convert to MP3"),
-            saveMp3: new ButtonState(true, false, "Save as MP3"),
-            saveMp4: new ButtonState(true, false, "Save as MP4")
+            saveMp3: new ButtonState(true, false, ".mp3"),
+            saveMp4: new ButtonState(true, false, ".mp4"),
+            downloadprogress: 0
         };
     }
 
@@ -156,6 +167,7 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
             this.setState(state, () => {
                 if ( this.props.onStatusUpdate !== undefined && state.status !== undefined ) {
                     this.props.onStatusUpdate(this, state.status);
+                    this.onStatusUpdate();
                 }
                 resolve();
             }));
@@ -167,13 +179,17 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
         });
         
         try {
-            this.video = await downloadVideo(this.props.id);
+            this.video = await downloadFile(this.props.file.url, e => {
+                this.updateState({
+                    downloadprogress: 100 / e.total * e.loaded
+                });
+            });
 
             this.updateState({
                 status: VideoStatus.downloaded,
                 download: new ButtonState(true, true, ""),
-                convert: new ButtonState(false, false, "Convert to MP3"),
-                saveMp4: new ButtonState(false, false, "Save as MP4")
+                saveMp3: new ButtonState(false, false, "Convert to .mp3"),
+                saveMp4: new ButtonState(false, false, ".mp4")
             });
 
         } catch(err) {
@@ -187,32 +203,44 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
 
     async convert() {
         this.updateState({
-            convert: new ButtonState(false, true, "Converting...")
+            status: VideoStatus.converting,
+            saveMp3: new ButtonState(false, true, "Converting...")
         });
-
         try {
             const ffmpeg = FFmpegWorker.singleton();
             this.audio = await ffmpeg.convertToMp3(this.video);
 
             this.updateState({
                 status: VideoStatus.converted,
-                convert: new ButtonState(true, true, ""),
-                saveMp3: new ButtonState(false, false, "Save as MP3")
+                saveMp3: new ButtonState(false, false, ".mp4")
             });
 
         } catch(err) {
             console.error(err);
             
             this.updateState({
-                convert: new ButtonState(false, false, "Convert to MP3")
+                status: VideoStatus.downloaded
             });
         }
     }
 
     async saveMp3() {
+       if ( this.state.status < VideoStatus.converted ) {
+            if ( this.state.status < VideoStatus.converting ) {
+                await this.convert();
+            } else {
+                await new Promise(res => {
+                    this.onStatusUpdate = () => {
+                        this.onStatusUpdate = () => {};
+                        res();
+                    }
+                });
+            }
+        }
+
         if ( typeof this.title === "string" ) {
 
-            saveToFile(this.audio, sanitize(this.props.filename + ".mp3"));
+            saveToFile(this.audio, sanitize(this.props.title + ".mp3"));
 
         } else {
             
@@ -226,7 +254,7 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
     }
 
     async saveMp4() {
-        saveToFile(this.video, sanitize(this.props.filename) + ".mp4");
+        saveToFile(this.video, sanitize(this.props.title) + ".mp4");
     }
 
     renderTitle() {
@@ -256,6 +284,7 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
         return (
             <div style={style.entry}>
                 <div style={style.background(this.props.thumbnail)} />
+                <div style={style.progressbar(this.state.downloadprogress)} />
                 { this.renderTitle() }
                 <div style={style.buttonContainer}>
                     <Button 
@@ -265,15 +294,6 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
                         hidden={this.state.download.hidden}
                     >
                         { this.state.download.text }
-                    </Button>
-                    <Button 
-                        icon="music" 
-                        color="rgb(200, 200, 50)"
-                        onClick={this.convert.bind(this)} 
-                        disabled={this.state.convert.disabled} 
-                        hidden={this.state.convert.hidden}
-                    >
-                        { this.state.convert.text }
                     </Button>
                     <Button 
                         icon="music" 

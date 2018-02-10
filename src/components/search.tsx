@@ -47,7 +47,6 @@ const style = {
 
 export interface SearchResult {
     id: string;
-    filename: string;
     title: string;
     thumbnail: string;
     file: {
@@ -114,7 +113,6 @@ export const Search = Radium(class extends React.Component<SearchProps, SearchSt
             
             this.props.onFound({
                 id: info.video_id, 
-                filename: info.video_id,
                 title: info.title, 
                 thumbnail: info.thumbnail_url,
                 file: {

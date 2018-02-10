@@ -22,6 +22,9 @@ import { App } from "./components/app";
     };
 })();
 
+/**
+ * Entry Point
+ */
 async function main() {
 
     const app = (<App/>);
@@ -32,4 +35,7 @@ async function main() {
 
 }
 
+/**
+ * Call Entry Point
+ */
 main();
