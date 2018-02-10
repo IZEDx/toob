@@ -67,7 +67,8 @@ export interface SearchState {
 export const Search = Radium(class extends React.Component<SearchProps, SearchState> {
     private waitTimer: number|null = null;
     private spinTimer: number|null = null;
-    
+    private inputElement: HTMLInputElement|null = null;
+
     constructor(props: SearchProps) {
         super(props);
         this.state = {
@@ -111,6 +112,10 @@ export const Search = Radium(class extends React.Component<SearchProps, SearchSt
                 throw new Error("Video not downloadable.");
             }
             
+            if (this.inputElement !== null) {
+                this.inputElement.value = "";
+            }
+
             this.props.onFound({
                 id: info.video_id, 
                 title: info.title, 
@@ -133,6 +138,7 @@ export const Search = Radium(class extends React.Component<SearchProps, SearchSt
             <div style={style.search}>
                 <i style={style.icon(this.state.rotation)} className="fa fa-search" aria-hidden="true"></i>
                 <input 
+                    ref={(el) => this.inputElement = el}
                     placeholder="Youtube URL..."
                     style={style.input}
                     onChange={this.handleChange.bind(this)}

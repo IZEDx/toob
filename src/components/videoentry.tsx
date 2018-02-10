@@ -64,8 +64,8 @@ const style = {
         bottom: "0",
         width: progress+"%",
         height: "5px",
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-        filter: "blur(3px)",
+        backgroundColor: "rgba(200, 50, 50, 0.2)",
+        filter: "blur(2px)",
         transition: "width 0.1s"
     }},
     buttonContainer: {
