@@ -6,7 +6,7 @@ import { Header } from "./header";
 import { Search, SearchResult } from "./search";
 import { VideoList } from "./videolist";
 import { VideoEntry, IVideoEntry, VideoStatus } from "./videoentry";
-import { Checkbox } from "./checkbox";
+import { RCheckbox } from "./checkbox";
 import { BulkActions } from "./bulkactions";
 
 const style = {
@@ -122,9 +122,9 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                         onFound={this.handleFound.bind(this)}
                     />
                     <div style={style.settings}>
-                        <Checkbox label="Auto-Convert" checked={this.state.settings.autoconvert} onChanged={this.changeSetting.bind(this)("autoconvert")} />
+                        <RCheckbox label="Auto-Convert" checked={this.state.settings.autoconvert} onChanged={this.changeSetting.bind(this)("autoconvert")} />
                         <div style={{width: 20}} />
-                        <Checkbox label="Auto-Download" checked={this.state.settings.autodownload} onChanged={this.changeSetting.bind(this)("autodownload")} />
+                        <RCheckbox label="Auto-Download" checked={this.state.settings.autodownload} onChanged={this.changeSetting.bind(this)("autodownload")} />
                     </div>
                     <VideoList>
                         { this.state.entries.map(entry => 

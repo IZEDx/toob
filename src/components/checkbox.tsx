@@ -2,7 +2,7 @@
 import * as React from "react";
 import * as Radium from "radium";
 
-interface CheckboxProps {
+export interface CheckboxProps {
     label: string;
     checked?: boolean;
     onChanged: (checked: boolean) => void;
@@ -12,7 +12,7 @@ interface CheckboxState {
     checked: boolean
 }
 
-export const Checkbox = Radium(class extends React.Component<CheckboxProps, CheckboxState> {
+export class Checkbox extends React.Component<CheckboxProps, CheckboxState> {
     
     constructor(props: CheckboxProps) {
         super(props);
@@ -74,4 +74,6 @@ export const Checkbox = Radium(class extends React.Component<CheckboxProps, Chec
             </button>
         );
     }
-});
+}
+
+export const RCheckbox = Radium(Checkbox);
