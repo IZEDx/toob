@@ -185,7 +185,7 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
 
             this.updateState({
                 status: VideoStatus.converted,
-                saveMp3: new ButtonState(false, false, ".mp4")
+                saveMp3: new ButtonState(false, false, ".mp3")
             });
 
         } catch(err) {
