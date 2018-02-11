@@ -7,7 +7,7 @@ import * as sanitize from "sanitize-filename";
 import { SearchResult } from "./search";
 import { IVideoEntry, VideoStatus } from "./videoentry";
 import { saveToFile } from "../libs/utils";
-import { Button } from "./button";
+import { RButton } from "./button";
 
 interface BulkActionsProps {
     entries: SearchResult[];
@@ -125,12 +125,12 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
 
         return (
             <div style={style.container}>
-                <Button icon="music" color="rgb(200,200,50)" disabled={disabled||this.state.saveMp3.disabled} onClick={this.saveMp3.bind(this)}> 
+                <RButton icon="music" color="rgb(200,200,50)" disabled={disabled||this.state.saveMp3.disabled} onClick={this.saveMp3.bind(this)}> 
                     {this.state.saveMp3.text} 
-                </Button>
-                <Button icon="film" color="rgb(50,200,50)" disabled={disabled||this.state.saveMp4.disabled} onClick={this.saveMp4.bind(this)}>
+                </RButton>
+                <RButton icon="film" color="rgb(50,200,50)" disabled={disabled||this.state.saveMp4.disabled} onClick={this.saveMp4.bind(this)}>
                     {this.state.saveMp4.text} 
-                </Button>
+                </RButton>
             </div>
         );
     }

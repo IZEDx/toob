@@ -2,7 +2,7 @@
 import * as React from "react";
 import * as Radium from "radium";
 
-interface ButtonProps {
+export interface ButtonProps {
     onClick?(): void;
     color?: string;
     disabled?: boolean;
@@ -13,7 +13,7 @@ interface ButtonProps {
 interface ButtonState {
 }
 
-export const Button = Radium(class extends React.Component<ButtonProps, ButtonState> {
+export class Button extends React.Component<ButtonProps, ButtonState> {
     private element : HTMLButtonElement|null = null;
 
     constructor(props: ButtonProps) {
@@ -75,4 +75,6 @@ export const Button = Radium(class extends React.Component<ButtonProps, ButtonSt
             </button>
         );
     }
-});
+}
+
+export const RButton = Radium(Button);

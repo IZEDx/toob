@@ -7,7 +7,7 @@ import { FFmpegWorker } from "../libs/ffmpeg";
 import { saveToFile, downloadFile } from "../libs/utils";
 import { parse, IParseResult } from "../libs/parser"; 
 import { SearchResult } from "./search";
-import { Button } from "./button";
+import { RButton } from "./button";
 
 const style = {
     entry: {
@@ -260,15 +260,15 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
                 <div style={style.progressbar(this.state.downloadprogress)} />
                 { this.renderTitle() }
                 <div style={style.buttonContainer}>
-                    <Button 
+                    <RButton 
                         icon="download" 
                         onClick={this.download.bind(this)} 
                         disabled={this.state.download.disabled} 
                         hidden={this.state.download.hidden}
                     >
                         { this.state.download.text }
-                    </Button>
-                    <Button 
+                    </RButton>
+                    <RButton 
                         icon="music" 
                         color="rgb(200, 200, 50)"
                         onClick={this.saveMp3.bind(this)} 
@@ -276,8 +276,8 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
                         hidden={this.state.saveMp3.hidden}
                     >
                         { this.state.saveMp3.text }
-                    </Button>
-                    <Button 
+                    </RButton>
+                    <RButton 
                         icon="film" 
                         color="rgb(50, 200, 50)"
                         onClick={this.saveMp4.bind(this)} 
@@ -285,7 +285,7 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
                         hidden={this.state.saveMp4.hidden}
                     >
                         { this.state.saveMp4.text }
-                    </Button>
+                    </RButton>
                 </div>
             </div>
         );
