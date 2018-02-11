@@ -1,26 +1,28 @@
 
 export class EventEmitter {
-    private listeners: {[key: string]: Function[]} = {};
+    private listeners: {[key: string]: (Function|undefined)[]} = {};
 
     emit(event: string, ...args: any[]){
         if(event in this.listeners) {
             for(let fn of this.listeners[event]) {
-                setTimeout(() => fn(...args), 0);
+                if (fn !== undefined) {
+                    setImmediate(() => fn !== undefined && fn(...args));
+                }
             }
         }
     }
 
     addListener(event: string, fn: Function): number{
         if(!(event in this.listeners)) this.listeners[event] = [];
-
-        return this.listeners[event].push(fn.bind(this));
+        const idx = this.listeners[event].push(fn.bind(this));
+        return idx;
     }
 
     removeListener(event: string, idx: number){
         if(!(event in this.listeners)) return;
         
         if(this.listeners[event].length > idx && idx >= 0) {
-            this.listeners[event].splice(idx, 1);
+            this.listeners[event][idx] = undefined;
         }
     }
  
