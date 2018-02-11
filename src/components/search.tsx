@@ -114,6 +114,7 @@ export const Search = Radium(class extends React.Component<SearchProps, SearchSt
             
             if (this.inputElement !== null) {
                 this.inputElement.value = "";
+                this.inputElement.focus();
             }
 
             this.props.onFound({
