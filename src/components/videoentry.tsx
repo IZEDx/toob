@@ -63,44 +63,12 @@ const style = {
         left: "0",
         bottom: "0",
         width: progress+"%",
-        height: "5px",
-        backgroundColor: "rgba(200, 50, 50, 0.2)",
-        filter: "blur(2px)",
+        height: "3px",
+        backgroundColor: "rgba(50, 220, 50, 0.35)",
         transition: "width 0.1s"
     }},
     buttonContainer: {
         flexShrink: 0
-    },
-    button: (color: string = "#ffffff") => {return{
-        border: "none",
-        outline: "none",
-        backgroundColor: "transparent",
-        transition: "background-color 0.2s, opacity 0.2s",
-        height: "100px",
-        margin: "none",
-        padding: "10px 10px",
-        color: color,
-        fontSize: "20px",
-        textAlign: "center",
-        boxSizing: "border-box",
-        touchCallout: "none",
-        userSelect: "none",
-        ":hover": {
-            backgroundColor: "rgba(255,255,255,0.1)",
-            outline: "solid 1.5px rgba(0,0,0,0.2)",
-            cursor: "pointer"
-        },
-        ":disabled": {
-            opacity: "0.3",
-            backgroundColor: "transparent",
-            cursor: "default"
-        }
-    }},
-    buttonText: {
-        marginLeft: "5px",
-        "@media screen and (max-width: 1080px)": {
-            display: "none"
-        }
     }
 }
 
@@ -149,7 +117,7 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
 
         this.state = {
             status: VideoStatus.added,
-            download: new ButtonState(false, false, "Download"),
+            download: new ButtonState(false, false, ""),
             saveMp3: new ButtonState(true, false, ".mp3"),
             saveMp4: new ButtonState(true, false, ".mp4"),
             downloadprogress: 0
@@ -192,6 +160,11 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
                 saveMp4: new ButtonState(false, false, ".mp4")
             });
 
+            setTimeout(() => {
+                this.updateState({
+                    downloadprogress: 0
+                });
+            }, 500)
         } catch(err) {
             console.error(err);
 
