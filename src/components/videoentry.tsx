@@ -183,15 +183,24 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
         }
         this.updateState({
             status: VideoStatus.converting,
-            saveMp3: new ButtonState(false, true, "Converting..."),
+            saveMp3: new ButtonState(false, true, "Waiting..."),
             progress: 0
         });
         try {
             const ffmpeg = FFmpegWorker.singleton();
+            let started = false;
             this.audio = await ffmpeg.convertToMp3(this.video, progress => {
-                this.updateState({
-                    progress
-                });
+                if (!started) {
+                    started = true;
+                    this.updateState({
+                        saveMp3: new ButtonState(false, true, "Converting..."),
+                        progress
+                    });
+                } else {
+                    this.updateState({
+                        progress
+                    });
+                }
             });
 
             this.updateState({
