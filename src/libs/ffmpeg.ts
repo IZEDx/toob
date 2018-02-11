@@ -1,7 +1,6 @@
 
 import { EventWorker } from "./worker";
-import { Observable, IObserver } from "./async";
-import { tou8, nop } from "./utils";
+import { tou8 } from "./utils";
 
 type FFmpegMessageType = "ready"|"run"|"stdout"|"stderr"|"exit"|"done"|"error";
 
@@ -52,15 +51,38 @@ declare interface FFmpegWorker {
     once(event: string, cb?: (...args: any[]) => void): Promise<any>;
 }
 
+export function ffmpegTimeToSeconds(timestr: string): number|null {
+    const res = /(?:(\d+):(\d+):(\d+)\.(\d+))/.exec(timestr);
+    if (res !== null) {
+        return  parseInt(res[1]) * 3600 
+                + parseInt(res[2]) * 60 
+                + parseInt(res[3]) 
+                + parseInt(res[4]) / 100;
+    } else {
+        return null;
+    }
+}
+
 class FFmpegWorker extends EventWorker {
     static instance: FFmpegWorker;
     private _ready: boolean = false;
+
+    set ready(v: boolean) {
+        this._ready = v;
+        if (v) {
+            this.emit("ready");
+        }
+    }
+
+    get ready() {
+        return this._ready;
+    }
 
     constructor() {
         super("ffmpeg-worker-mp4.js");
         super.on("message", this.onMessage.bind(this));
         super.on("error", this.onError.bind(this));
-        this.once("ready", () => this._ready = true);
+        this.once("ready", () => this.ready = true);
     }
 
     static singleton() {
@@ -79,56 +101,43 @@ class FFmpegWorker extends EventWorker {
         this.emit("error", err);
     }
 
-    public async waitReady(): Promise<boolean> {
-        return this._ready || await this.once("ready") || true;
+    public async waitReady(): Promise<void> {
+        while (!this.ready) {
+            await this.once("ready");
+        }
     }
 
-    public convert(data: Blob, args?: string[]): Observable<string> {
-        return Observable.create(async (observer: IObserver<string>) => {
-            if (!this._ready) {
-                await this.once("ready");
-            }
+    public async convertToMp3(data: Uint8Array, onProgress: (progress: number) => void = () => {}): Promise<Uint8Array> {
+        await this.waitReady();
+        this.ready = false;
 
-            const ab: Uint8Array = await new Promise<Uint8Array>(resolve => {
-                const fr = new FileReader();
-                fr.onload = function() {
-                   resolve(new Uint8Array(this.result));
-                };
-                fr.readAsArrayBuffer(data);
-            });
-
-            this.worker.postMessage({
-                type: "run", 
-                arguments: args || [],
-                MEMFS: [{name: "in.mp4", ab}]
-            });
-
-            const unout = this.on("stdout", observer.next.bind(observer));
-            const unerr = this.on("stderr", !!observer.error ? observer.error.bind(observer) : nop);
-
-            await this.once("done");
-
-            //observer.next(res.MEMFS[0].data);
-
-            unout();
-            unerr();
-
-            if (!!observer.complete) {
-                observer.complete();
+        let duration: number|null = null;
+        const unsub = this.on("stderr", (s) => {
+            if (duration === null) {
+                const res = /Duration: (\d+:\d+:\d+\.\d+), start:/.exec(s);
+                if (res !== null) {
+                    duration = ffmpegTimeToSeconds(res[1]);
+                }
+            } else if(duration > 0) {
+                const res = /time=(\d+:\d+:\d+\.\d+) bitrate=/.exec(s);
+                if (res !== null) {
+                    const time = ffmpegTimeToSeconds(res[1]);
+                    console.log(time, res);
+                    onProgress(100 / duration * (time || 0));
+                }
             }
         });
-    }
-
-    public async convertToMp3(data: Uint8Array): Promise<Uint8Array> {
-        await this.waitReady();
 
         this.worker.postMessage({
             type: "run", 
-            arguments: ["-i", "in.mp4", "-codec:a", "libmp3lame", "-qscale:a", "2", "out.mp3"],
+            arguments: ["-y", "-i", "in.mp4", "-codec:a", "libmp3lame", "-qscale:a", "2", "out.mp3"],
             MEMFS: [{name: "in.mp4", data}]
         });
         
         const results = await this.once("done");
+        
+        unsub();
+        this.ready = true;
         
         if (results.length === 0 || results[0].MEMFS.length === 0) {
             throw new Error("Could not convert file.");
