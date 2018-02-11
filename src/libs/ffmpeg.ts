@@ -63,26 +63,23 @@ export function ffmpegTimeToSeconds(timestr: string): number|null {
     }
 }
 
+interface FFmpegTask {
+    message: any;
+    stdout: (s: string) => void;
+    done: (data: Uint8Array) => void;
+}
+
 class FFmpegWorker extends EventWorker {
     static instance: FFmpegWorker;
     private _ready: boolean = false;
-
-    set ready(v: boolean) {
-        this._ready = v;
-        if (v) {
-            this.emit("ready");
-        }
-    }
-
-    get ready() {
-        return this._ready;
-    }
+    private queue: FFmpegTask[] = [];
 
     constructor() {
         super("ffmpeg-worker-mp4.js");
         super.on("message", this.onMessage.bind(this));
         super.on("error", this.onError.bind(this));
-        this.once("ready", () => this.ready = true);
+        this.on("stderr", this.onStdErr.bind(this));
+        this.once("ready", () => this._ready = true);
     }
 
     static singleton() {
@@ -101,18 +98,60 @@ class FFmpegWorker extends EventWorker {
         this.emit("error", err);
     }
 
-    public async waitReady(): Promise<void> {
-        while (!this.ready) {
-            await this.once("ready");
+    private onStdErr(s: string) {
+        if (this.queue.length === 0) {
+            return;
         }
+        this.queue[0].stdout(s);
     }
 
-    public async convertToMp3(data: Uint8Array, onProgress: (progress: number) => void = () => {}): Promise<Uint8Array> {
-        await this.waitReady();
-        this.ready = false;
 
+    public async waitReady(): Promise<void> {
+        this._ready || await this.once("ready") || true;
+    }
+
+    private nextTask() {
+        setImmediate(async () => {
+            if (this.queue.length === 0) {
+                return;
+            }
+    
+            const task = this.queue[0];
+    
+            this.worker.postMessage(task.message);
+            const results = await this.once("done");
+    
+            this.queue.splice(0,1);
+            
+            if (results.length === 0 || results[0].MEMFS.length === 0) {
+                throw new Error("Could not convert file.");
+            }
+    
+            setImmediate(task.done(tou8(results[0].MEMFS[0].data)));
+        });
+    }
+
+    public async convert(message: any, stdout: (s: string) => void): Promise<Uint8Array> {
+        await this.waitReady();
+        return new Promise<Uint8Array>(res => {
+            this.queue.push({
+                message, stdout, done: (data: Uint8Array) => {
+                    if (this.queue.length > 0) {
+                        this.nextTask();
+                    }
+                    res(data);
+                }
+            });
+
+            if ( this.queue.length === 1 ) {
+                this.nextTask();
+            }
+        });
+    }
+
+    public convertWithProgress(message: any, onProgress: (progress: number) => void): Promise<Uint8Array> {
         let duration: number|null = null;
-        const unsub = this.on("stderr", (s) => {
+        return this.convert(message, s => {
             if (duration === null) {
                 const res = /Duration: (\d+:\d+:\d+\.\d+), start:/.exec(s);
                 if (res !== null) {
@@ -122,28 +161,19 @@ class FFmpegWorker extends EventWorker {
                 const res = /time=(\d+:\d+:\d+\.\d+) bitrate=/.exec(s);
                 if (res !== null) {
                     const time = ffmpegTimeToSeconds(res[1]);
-                    console.log(time, res);
                     onProgress(100 / duration * (time || 0));
                 }
             }
         });
+    }
 
-        this.worker.postMessage({
+
+    public convertToMp3(data: Uint8Array, onProgress: (progress: number) => void = () => {}): Promise<Uint8Array> {
+        return this.convertWithProgress({
             type: "run", 
             arguments: ["-y", "-i", "in.mp4", "-codec:a", "libmp3lame", "-qscale:a", "2", "out.mp3"],
             MEMFS: [{name: "in.mp4", data}]
-        });
-        
-        const results = await this.once("done");
-        
-        unsub();
-        this.ready = true;
-        
-        if (results.length === 0 || results[0].MEMFS.length === 0) {
-            throw new Error("Could not convert file.");
-        }
-
-        return tou8(results[0].MEMFS[0].data);
+        }, onProgress);
     }
 
 }
