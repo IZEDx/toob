@@ -118,7 +118,7 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
 
         this.state = {
             status: VideoStatus.added,
-            download: new ButtonState(false, false, ""),
+            download: new ButtonState(false, false, "Download"),
             saveMp3: new ButtonState(true, false, ".mp3"),
             saveMp4: new ButtonState(true, false, ".mp4"),
             progress: 0
@@ -157,7 +157,7 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
             this.updateState({
                 status: VideoStatus.downloaded,
                 download: new ButtonState(true, true, ""),
-                saveMp3: new ButtonState(false, false, "Convert to .mp3"),
+                saveMp3: new ButtonState(false, false, ".mp3"),
                 saveMp4: new ButtonState(false, false, ".mp4")
             });
         } catch(err) {
@@ -177,7 +177,15 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
         }, 500) as any;
     }
 
-    async convert() {
+    async convert(): Promise<void> {
+        if (this.state.status === VideoStatus.converting) {
+            return new Promise<void>(res => {
+                this.onStatusUpdate = () => {
+                    this.onStatusUpdate = () => {};
+                    res();
+                }
+            });
+        }
         if (this.progressBarTimer) {
             clearTimeout(this.progressBarTimer);
         }
@@ -211,7 +219,8 @@ export const VideoEntry = Radium(class extends React.Component<SearchResult&Vide
             console.error(err);
             
             this.updateState({
-                status: VideoStatus.downloaded
+                status: VideoStatus.downloaded,
+                saveMp3: new ButtonState(false, false, ".mp3")
             });
         }
         setTimeout(() => {

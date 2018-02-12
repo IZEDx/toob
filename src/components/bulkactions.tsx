@@ -68,7 +68,7 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
                     await el.download();
                 }
     
-                if (mp3 && el.state.status < VideoStatus.converted) {
+                if (mp3 && el.state.status < VideoStatus.converting) {
                     await el.convert();
                 }
     
@@ -84,7 +84,7 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
     async saveMp3() {
 
         this.setState({
-            saveMp3: new ButtonState(false, true, "Preparing...")
+            saveMp3: new ButtonState(false, true, "Waiting...")
         });
 
         const zip = await this.prepareAndZipVideos(true);
@@ -103,7 +103,7 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
     async saveMp4() {
 
         this.setState({
-            saveMp4: new ButtonState(false, true, "Preparing...")
+            saveMp4: new ButtonState(false, true, "Waiting...")
         });
 
         const zip = await this.prepareAndZipVideos();
