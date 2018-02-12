@@ -68,7 +68,7 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
                     await el.download();
                 }
     
-                if (mp3 && el.state.status < VideoStatus.converting) {
+                if (mp3 && el.state.status < VideoStatus.converted) {
                     await el.convert();
                 }
     
