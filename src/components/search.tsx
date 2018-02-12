@@ -4,8 +4,8 @@ import * as Radium from "radium";
 import { FocusEvent } from "react";
 
 (function() {
-    const cors_api_host = 'toob.host:8090';
-    const cors_api_url = 'http://' + cors_api_host + '/';
+    const cors_api_host = 'cors-anywhere.herokuapp.com';
+    const cors_api_url = 'https://' + cors_api_host + '/';
     const slice = [].slice;
     const origin = window.location.protocol + '//' + window.location.host;
     const fetch = window.fetch;
