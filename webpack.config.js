@@ -3,12 +3,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: './src/main.tsx',
-    devtool: 'source-map',
-    devServer: {
-        contentBase: path.join(__dirname, "assets"),
-        compress: true,
-        port: 9000
-    },
     output: {
         path: path.join(__dirname, "dist"),
         filename: 'bundle.js',
