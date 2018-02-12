@@ -1,8 +1,26 @@
 
 import * as React from "react";
 import * as Radium from "radium";
-import { getInfo } from "ytdl-core";
 import { FocusEvent } from "react";
+
+(function() {
+    const cors_api_host = 'toob.host:8090';
+    const cors_api_url = 'http://' + cors_api_host + '/';
+    const slice = [].slice;
+    const origin = window.location.protocol + '//' + window.location.host;
+    const fetch = window.fetch;
+    window.fetch = function() {
+        const args = slice.call(arguments);
+        const targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[0]);
+        if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
+            targetOrigin[1] !== cors_api_host) {
+            args[0] = cors_api_url + args[0];
+        }
+        return fetch.apply(this, args);
+    };
+})();
+
+import { getInfo } from "ytdl-core";
 
 const style = {
     search: {
