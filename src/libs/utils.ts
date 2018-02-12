@@ -8,7 +8,7 @@ export interface FetchOptions {
 }
 
 const origin = window.location.protocol + '//' + window.location.host;
-export function fetch(url: string, opts: FetchOptions = {}, cors: string = "cors-anywhere.herokuapp.com"): Promise<ArrayBuffer> {
+export function fetch(url: string, opts: FetchOptions = {}, cors: string = "cors.ized.io"): Promise<ArrayBuffer> {
     const cors_url = "https://" + cors + "/";
     const targetOrigin = /^https?:\/\/([^\/]+)/i.exec(url);
     if (targetOrigin && targetOrigin[0].toLowerCase() !== origin && targetOrigin[1] !== cors) {

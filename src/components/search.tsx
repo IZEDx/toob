@@ -4,7 +4,7 @@ import * as Radium from "radium";
 import { FocusEvent } from "react";
 
 (function() {
-    const cors_api_host = 'cors-anywhere.herokuapp.com';
+    const cors_api_host = 'cors.ized.io';
     const cors_api_url = 'https://' + cors_api_host + '/';
     const slice = [].slice;
     const origin = window.location.protocol + '//' + window.location.host;
