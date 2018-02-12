@@ -65,7 +65,7 @@ const style = {
         width: progress+"%",
         height: "3px",
         backgroundColor: "rgba(50, 220, 50, 0.35)",
-        transition: "width 0.1s"
+        transition: "width 0.5s linear"
     }},
     buttonContainer: {
         flexShrink: 0
