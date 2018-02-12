@@ -28,8 +28,9 @@ const style = {
         height: "55px",
         backgroundColor: "rgba(255, 255, 255, 0.05)",
         padding: "10px 30px",
-        borderLeft: "solid 1px rgba(0, 0, 0, 0.4)",
-        borderBottom: "solid 1px rgba(0, 0, 0, 0.4)",
+        borderLeft: "solid 1px rgba(0, 0, 0, 0.7)",
+        borderBottom: "solid 1px rgba(0, 0, 0, 0.7)",
+        boxShadow: "inset 5px -20px 50px -12px rgba(0, 0, 0, 0.2)",
         overflow: "hidden" as "hidden",
         ":focus>.icon": {
             transform: "rotateZ(45) scale(1.5)"

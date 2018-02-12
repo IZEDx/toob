@@ -41,12 +41,12 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
     get style() {
         return {
             container: {
-                backgroundColor: "rgba(45, 45, 45, 0.7)",
+                backgroundColor: "rgba(255, 255, 255, 0.01)",
                 padding: "0px 10px",
-                borderTop: "solid 1px rgba(0, 0, 0, 0.5)",
+                borderTop: "solid 1px rgba(255, 255, 255, 0.04)",
                 gridColumn: "1/span 2",
                 boxSizing: "border-box",
-                boxShadow: "0px -8px 30px -10px rgba(255, 255, 255, 0.03)",
+                boxShadow: "0px -10px 40px -10px rgba(0, 0, 0, 0.1)",
                 display: "flex" as "flex",
                 justifyContent: "flex-end" as "flex-end",
             },

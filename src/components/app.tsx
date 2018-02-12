@@ -39,10 +39,10 @@ const style = {
         border: "solid 0.5px rgba(255, 255, 255, 0.1)",
         fontSize: "12px",
         fontFamily: "Montserrat, bold",
-        boxShadow: "0px 5px 20px -6px rgba(0, 0, 0, 0.4)",
+        boxShadow: "0px 15px 50px -6px rgba(0, 0, 0, 0.3)",
         display: "grid",
         gridTemplateColumns: "200px auto",
-        gridTemplateRows: "75px 35px auto 75px",
+        gridTemplateRows: "75px 45px auto 75px",
         backgroundImage: "url(./img/Background_cropped.png",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "calc(0% - 200px) calc(100% + 200px)",
@@ -55,6 +55,7 @@ const style = {
         display: "flex" as "flex",
         justifyContent: "flex-end" as "flex-end",
         gridColumn: "1/span 2",
+        padding: "5px"
     }
 }
 
