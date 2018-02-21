@@ -9,9 +9,15 @@ import { VideoEntry, IVideoEntry, VideoStatus } from "./videoentry";
 import { RCheckbox } from "./checkbox";
 import { BulkActions } from "./bulkactions";
 
+
+
 const style = {
     container: {
-        background: "linear-gradient(to bottom, #AD2332 150px, #232323 150px)",
+        //background: "linear-gradient(to bottom, #AD2332 150px, #232323 150px)",
+        backgroundImage: "url(https://source.unsplash.com/daily?gigantic)",
+        backgroundRepeat: "no-repeat",
+        //backgroundPosition: "calc(0% - 200px) calc(100% + 200px)",
+        backgroundSize: "cover",
         width: "100vw",
         height: "100vh",
         transition: "padding 0.4s",
@@ -29,11 +35,10 @@ const style = {
         }
     },
     app: {
-        minWidth: "500px",
+        minWidth: "500px", 
         maxWidth: "1150px",
         width: "100%",
         height: "100%",
-        backgroundColor: "#18191A",
         marginLeft: "50%",
         transform: "translateX(-50%)",
         border: "solid 0.5px rgba(255, 255, 255, 0.1)",
@@ -43,13 +48,20 @@ const style = {
         display: "grid",
         gridTemplateColumns: "200px auto",
         gridTemplateRows: "75px 45px auto 75px",
-        backgroundImage: "url(./img/Background_cropped.png",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "calc(0% - 200px) calc(100% + 200px)",
-        backgroundSize: "contain",
         "@media screen and (max-width: 880px)": {
             gridTemplateColumns: "110px auto",
         }
+    },
+    blur: {
+        zIndex: -1,
+        position: "absolute" as "absolute",
+        backdropFilter: "blur(30px)",
+        backgroundColor: "rgba(24, 25, 26, 0.7)",
+        width: "100%",
+        height: "100%",
+        backfaceVisibility: "hidden",
+        perspective: 1000,
+        transform: "translate3d(0,0,0)"
     },
     settings: {
         display: "flex" as "flex",
@@ -117,6 +129,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
         return (
             <Radium.StyleRoot style={style.container}>
                 <Radium.StyleRoot style={style.app}>
+                    <div style={style.blur} />
                     <Header>toob.host</Header>
                     <Search 
                         onSearching={this.handleSearching.bind(this)}

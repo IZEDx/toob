@@ -25,9 +25,10 @@ const style = {
         flexWrap: "nowrap" as "nowrap",
         flexAlign: "stretch" as "stretch",
         justifyContent: "stretch" as "stretch",
-        transition: "background-color 0.2s",
+        backgroundColor: "rgba(24, 25, 26, 0.5)",
+        transition: "background-color linear 0.2s",
         ":hover": {
-            backgroundColor: "rgba(0,0,0,0.2)"
+            backgroundColor: "rgba(0,0,0,0.6)"
         }
     },
     title: {
@@ -54,8 +55,8 @@ const style = {
         backgroundSize: "cover",
         backgroundPosition: "center center",
         backgroundImage: `url(${thumbnail})`,
-        filter: "blur(10px) brightness(70%) grayscale(40%)",
-        opacity: 0.2
+        filter: "blur(15px)",
+        opacity: 0.5
     }},
     progressbar: (progress: number) => {return{
         zIndex: 0,
@@ -68,7 +69,10 @@ const style = {
         transition: "width 0.5s linear"
     }},
     buttonContainer: {
-        flexShrink: 0
+        flexShrink: 0,
+        backfaceVisibility: "hidden",
+        perspective: 1000,
+        transform: "translate3d(0,0,0)"
     }
 }
 

@@ -26,11 +26,11 @@ const style = {
     search: {
         position: "relative" as "relative",
         height: "55px",
-        backgroundColor: "rgba(255, 255, 255, 0.05)",
+        backgroundColor: "rgba(150, 150, 150, 0.15)",
         padding: "10px 30px",
-        borderLeft: "solid 1px rgba(0, 0, 0, 0.7)",
-        borderBottom: "solid 1px rgba(0, 0, 0, 0.7)",
-        boxShadow: "inset 5px -20px 50px -12px rgba(0, 0, 0, 0.2)",
+        borderLeft: "solid 1px rgba(0, 0, 0, 0.5)",
+        borderBottom: "solid 1px rgba(0, 0, 0, 0.5)",
+        boxShadow: "inset 5px -20px 50px -15px rgba(0, 0, 0, 0.15)",
         overflow: "hidden" as "hidden",
         ":focus>.icon": {
             transform: "rotateZ(45) scale(1.5)"
