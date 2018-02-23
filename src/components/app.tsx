@@ -13,11 +13,10 @@ import { BulkActions } from "./bulkactions";
 
 const style = {
     container: {
-        //background: "linear-gradient(to bottom, #AD2332 150px, #232323 150px)",
-        backgroundImage: "url(https://source.unsplash.com/daily?gigantic)",
-        backgroundRepeat: "no-repeat",
-        //backgroundPosition: "calc(0% - 200px) calc(100% + 200px)",
-        backgroundSize: "cover",
+        background: "linear-gradient(to bottom, #AD2332 150px, #232323 150px)",
+        //backgroundImage: "url(./img/bg.jpeg)",
+        //backgroundRepeat: "no-repeat",
+        //backgroundSize: "cover",
         width: "100vw",
         height: "100vh",
         transition: "padding 0.4s",
@@ -45,6 +44,7 @@ const style = {
         fontSize: "12px",
         fontFamily: "Montserrat, bold",
         boxShadow: "0px 15px 50px -6px rgba(0, 0, 0, 0.3)",
+        backgroundColor: "rgba(24, 25, 26, 1)",
         display: "grid",
         gridTemplateColumns: "200px auto",
         gridTemplateRows: "75px 45px auto 75px",
@@ -52,13 +52,17 @@ const style = {
             gridTemplateColumns: "110px auto",
         }
     },
-    blur: {
+    appbg: {
         zIndex: -1,
         position: "absolute" as "absolute",
-        backdropFilter: "blur(30px)",
-        backgroundColor: "rgba(24, 25, 26, 0.7)",
+        //backdropFilter: "blur(30px)",
+        //backdropFilter: "grayscale(50%) blur(15px)",
+        backgroundImage: "url(./img/Background_cropped.png",	
+        backgroundRepeat: "no-repeat",	
+        backgroundPosition: "calc(0% - 200px) calc(100% + 200px)",	
+        backgroundSize: "contain",
         width: "100%",
-        height: "100%",
+        height: "100%", 
         backfaceVisibility: "hidden",
         perspective: 1000,
         transform: "translate3d(0,0,0)"
@@ -129,7 +133,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
         return (
             <Radium.StyleRoot style={style.container}>
                 <Radium.StyleRoot style={style.app}>
-                    <div style={style.blur} />
+                    <div style={style.appbg} />
                     <Header>toob.host</Header>
                     <Search 
                         onSearching={this.handleSearching.bind(this)}
