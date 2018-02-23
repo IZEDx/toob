@@ -30,7 +30,7 @@ const style = {
         padding: "10px 30px",
         borderLeft: "solid 1px rgba(0, 0, 0, 0.5)",
         borderBottom: "solid 1px rgba(0, 0, 0, 0.5)",
-        boxShadow: "inset 5px -20px 50px -15px rgba(0, 0, 0, 0.15)",
+        boxShadow: "inset 5px -20px 40px -10px rgba(0, 0, 0, 0.17)",
         overflow: "hidden" as "hidden",
         ":focus>.icon": {
             transform: "rotateZ(45) scale(1.5)"
