@@ -71,8 +71,13 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
                 if (mp3 && el.state.status < VideoStatus.converted) {
                     await el.convert();
                 }
+
+                let arr: Uint8Array|null = mp3 ? el.audio : el.video;
+                if (arr === null) {
+                    return;
+                }
     
-                zip.file(sanitize(entry.title) + (mp3 ? ".mp3" : ".mp4"), (mp3 ? el.audio : el.video));
+                zip.file(sanitize(entry.title) + (mp3 ? ".mp3" : ".mp4"), arr);
             })());
     
         }
