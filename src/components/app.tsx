@@ -24,7 +24,7 @@ const style = {
         paddingTop: "75px",
         paddingRight: "100px",
         paddingBottom: "75px",
-        boxSizing: "border-box",
+        boxSizing: "border-box" as "border-box",
         "@media screen and (max-height: 780px)": {
             paddingTop: "0px",
             paddingBottom: "0px"
@@ -58,12 +58,12 @@ const style = {
         //backdropFilter: "blur(30px)",
         //backdropFilter: "grayscale(50%) blur(15px)",
         backgroundImage: "url(./img/Background_cropped.png",	
-        backgroundRepeat: "no-repeat",	
+        backgroundRepeat: "no-repeat" as "no-repeat",	
         backgroundPosition: "calc(0% - 200px) calc(100% + 200px)",	
         backgroundSize: "contain",
         width: "100%",
         height: "100%", 
-        backfaceVisibility: "hidden",
+        backfaceVisibility: "hidden" as "hidden",
         perspective: 1000,
         transform: "translate3d(0,0,0)"
     },

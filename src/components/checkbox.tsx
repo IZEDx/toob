@@ -27,7 +27,7 @@ export class Checkbox extends React.Component<CheckboxProps, CheckboxState> {
             button: {
                 position: "relative" as "relative",
                 paddingLeft: 35,
-                boxSizing: "border-box",
+                boxSizing: "border-box" as "border-box",
                 border: "none",
                 outline: "none",
                 backgroundColor: "transparent",
@@ -39,7 +39,7 @@ export class Checkbox extends React.Component<CheckboxProps, CheckboxState> {
                 top: 5,
                 width: 25,
                 height: 25,
-                boxSizing: "border-box",
+                boxSizing: "border-box" as "border-box",
                 border: "solid 0.5px rgba(255, 255,255, 0.2)",
                 color: "rgba(255,255,255,0.5)",
                 fontSize: "25px",

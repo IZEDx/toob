@@ -4,7 +4,7 @@ import * as Radium from "radium";
 
 const style = {
     container: {
-        boxSizing: "border-box",
+        boxSizing: "border-box" as "border-box",
         gridColumn: "1/span 2",
         overflow: "auto" as "auto"
     },

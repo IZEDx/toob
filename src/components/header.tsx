@@ -4,20 +4,20 @@ import * as Radium from "radium";
 
 const style = {
     header: {
-        userSelect: "none",
+        userSelect: "none" as "none",
         "@media screen and (max-width: 880px)": {
             width: "75px"
         }
     },
     icon: {
-        float: "left",
+        float: "left" as "left",
         marginLeft: "18px",
         marginRight: "-13px",
         height: "100%",
         width: "25%",
         backgroundImage: "url(./img/Logo_250.png)",
         backgroundSize: "contain",
-        backgroundRepeat: "no-repeat",
+        backgroundRepeat: "no-repeat" as "no-repeat",
         backgroundPosition: "center",
         "@media screen and (max-width: 880px)": {
             width: "100%"
@@ -25,10 +25,10 @@ const style = {
     },
     title: {
         display: "block",
-        float: "left",
+        float: "left" as "left",
         height: "70px",
         width: "70%",
-        textAlign: "center",
+        textAlign: "center" as "center",
         lineHeight: "70px",
         fontSize: "33px",
         fontFamily: "Dhurjati, sans-serif",
