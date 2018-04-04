@@ -16,26 +16,26 @@
     "ffmpeg.js": "^3.1.9001",
     "jszip": "^3.1.5",
     "radium": "^0.21.2",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
     "sanitize-filename": "^1.6.1",
-    "ytdl-core": "^0.20.1"
+    "ytdl-core": "^0.20.2"
   },
   "devDependencies": {
     "@types/jszip": "^3.1.3",
-    "@types/radium": "^0.18.23",
-    "@types/react": "^16.0.34",
-    "@types/react-dom": "^16.0.3",
+    "@types/radium": "^0.18.24",
+    "@types/react": "^16.3.5",
+    "@types/react-dom": "^16.0.4",
     "@types/sanitize-filename": "^1.1.28",
-    "babel-minify-webpack-plugin": "^0.3.0",
-    "copy-webpack-plugin": "^4.3.1",
+    "babel-minify-webpack-plugin": "^0.3.1",
+    "copy-webpack-plugin": "^4.5.1",
     "source-map-loader": "^0.2.3",
     "ts-loader": "^3.3.1",
     "tslint": "^5.9.1",
-    "tslint-webpack-plugin": "^1.0.0",
-    "typescript": "^2.7.0-rc",
-    "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.11.1",
-    "webpack-merge": "^4.1.1"
+    "tslint-webpack-plugin": "^1.2.2",
+    "typescript": "^2.8.1",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.2",
+    "webpack-merge": "^4.1.2"
   }
 }

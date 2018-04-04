@@ -11,7 +11,7 @@ import { RButton } from "./button";
 
 const style = {
     entry: {
-        boxSizing: "border-box",
+        boxSizing: "border-box" as "border-box",
         position: "relative" as "relative",
         width: "calc(100%)",
         height: "100px",
@@ -34,7 +34,7 @@ const style = {
     title: {
         fontSize: "22px",
         fontFamily: "Montserrat, bold",
-        textAlign: "left",
+        textAlign: "left" as "left",
         lineHeight: "100px",
         verticalAlign: "center",
         flexShrink: 1,
@@ -70,7 +70,7 @@ const style = {
     }},
     buttonContainer: {
         flexShrink: 0,
-        backfaceVisibility: "hidden",
+        backfaceVisibility: "hidden" as "hidden",
         perspective: 1000,
         transform: "translate3d(0,0,0)"
     }
