@@ -1,9 +1,12 @@
+/// <reference path="sw.d.ts"/>
 
 import * as React from "react";
 import { render } from "react-dom";
 
 import { FFmpegWorker } from "./libs/ffmpeg";
 import { App } from "./components/app";
+
+import { register } from "serviceworker-webpack-plugin/lib/runtime";
 
 const windowEvent = (event: string) => new Promise(resolve => window.addEventListener(event, ev => resolve(ev)));
 
@@ -20,7 +23,7 @@ async function main() {
     if ("serviceWorker" in navigator) {
         await windowEvent("load");
         try {
-            const registration = await navigator.serviceWorker.register('/sw.js');
+            const registration = register();
             console.log('ServiceWorker registration successful with scope: ', registration.scope);
         } catch (err) {
             console.log('ServiceWorker registration failed: ', err);

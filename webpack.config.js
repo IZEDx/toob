@@ -1,10 +1,10 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin');
 
 module.exports = {
     entry: {
-        toob: "./src/main.tsx",
-        sw: "./src/serviceworker.ts"
+        toob: "./src/main.tsx"
     },
     output: {
         path: path.join(__dirname, "dist"),
@@ -32,7 +32,10 @@ module.exports = {
             { from: 'node_modules/ffmpeg.js/ffmpeg-worker-mp4.js' },
             { from: 'assets' },
             { from: 'src/index.html' }
-        ])
+        ]),
+        new ServiceWorkerWebpackPlugin({
+          entry: path.join(__dirname, 'src/sw.ts'),
+        })
     ],
     externals: {
     },
