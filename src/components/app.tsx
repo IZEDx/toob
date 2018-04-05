@@ -17,6 +17,9 @@ const style = {
         //backgroundImage: "url(./img/bg.jpeg)",
         //backgroundRepeat: "no-repeat",
         //backgroundSize: "cover",
+        position: "absolute" as "absolute",
+        left: 0,
+        top: 0,
         width: "100vw",
         height: "100vh",
         transition: "padding 0.4s",
@@ -25,11 +28,11 @@ const style = {
         paddingRight: "100px",
         paddingBottom: "75px",
         boxSizing: "border-box" as "border-box",
-        "@media screen and (max-height: 780px)": {
-            paddingTop: "0px",
-            paddingBottom: "0px"
+        "@media only screen and (max-height: 780px)": {
+            paddingTop: 0,
+            paddingBottom: 0
         },
-        "@media screen and (max-width: 880px)": {
+        "@media only screen and (max-width: 768px)": {
             padding: 0
         }
     },
@@ -48,8 +51,9 @@ const style = {
         display: "grid",
         gridTemplateColumns: "200px auto",
         gridTemplateRows: "75px 45px auto 75px",
-        "@media screen and (max-width: 880px)": {
+        "@media screen and (max-width: 768px)": {
             gridTemplateColumns: "110px auto",
+            minWidth: 0
         }
     },
     appbg: {
