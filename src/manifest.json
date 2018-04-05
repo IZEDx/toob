@@ -1,0 +1,20 @@
+{
+  "short_name": "toob.host",
+  "name": "YouTube Downloader",
+  "icons": [
+    {
+      "src": "img/Logo_250.png",
+      "type": "image/png",
+      "sizes": "250x250"
+    },
+    {
+      "src": "img/Logo.png",
+      "type": "image/png",
+      "sizes": "1024x1024"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#232323",
+  "theme_color": "#232323"
+}

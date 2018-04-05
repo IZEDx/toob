@@ -31,7 +31,8 @@ module.exports = {
         new CopyWebpackPlugin([
             { from: 'node_modules/ffmpeg.js/ffmpeg-worker-mp4.js' },
             { from: 'assets' },
-            { from: 'src/index.html' }
+            { from: 'src/index.html' },
+            { from: 'src/manifest.json' }
         ]),
         new ServiceWorkerWebpackPlugin({
           entry: path.join(__dirname, 'src/sw.ts'),
