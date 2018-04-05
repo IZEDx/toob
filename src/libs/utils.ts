@@ -1,3 +1,5 @@
+/// <reference path="saveAs.d.ts"/>
+import { saveAs } from "browser-filesaver";
 
 export interface FetchOptions {
     method?: "get"|"post"|"put"|"delete";
@@ -47,28 +49,10 @@ export async function downloadFile(url: string, onProgress?: (e: ProgressEvent) 
 }
 
 
-export function tou8(buf: Uint8Array|string|SharedArrayBuffer): Uint8Array {
-    if (buf.constructor.name === 'Uint8Array'
-    || buf.constructor === Uint8Array) {
-        return buf as Uint8Array;
-    }
-    if (typeof buf === 'string') buf = new Buffer(buf);
-    var a = new Uint8Array(buf.length);
-    for (var i = 0; i < buf.length; i++) a[i] = buf[i];
-    return a;
-}
-
 export const nop = () => {};
 
-
-const fsElement = document.createElement("a");
-document.body.appendChild(fsElement);
-fsElement.style.display = "none";
 export function saveToFile(data: Blob|Uint8Array, filename: string) {
     const blob = new Blob([data], {type: "octet/stream"});
-    const url = window.URL.createObjectURL(blob);
-    fsElement.href = url;
-    fsElement.download = filename;
-    fsElement.click();
-    window.URL.revokeObjectURL(url);
+    saveAs(blob, filename);
 }
+

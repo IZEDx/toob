@@ -1,6 +1,16 @@
 
 import { EventWorker } from "./worker";
-import { tou8 } from "./utils";
+
+function tou8(buf: Uint8Array|string|SharedArrayBuffer): Uint8Array {
+    if (buf.constructor.name === 'Uint8Array'
+    || buf.constructor === Uint8Array) {
+        return buf as Uint8Array;
+    }
+    if (typeof buf === 'string') buf = new Buffer(buf);
+    var a = new Uint8Array(buf.length);
+    for (var i = 0; i < buf.length; i++) a[i] = buf[i];
+    return a;
+}
 
 type FFmpegMessageType = "ready"|"run"|"stdout"|"stderr"|"exit"|"done"|"error";
 
