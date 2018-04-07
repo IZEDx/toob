@@ -28,7 +28,7 @@ const style = {
         paddingRight: "100px",
         paddingBottom: "75px",
         boxSizing: "border-box" as "border-box",
-        "@media only screen and (max-height: 780px)": {
+        "@media only screen and (max-height: 768px)": {
             paddingTop: 0,
             paddingBottom: 0
         },
@@ -37,7 +37,6 @@ const style = {
         }
     },
     app: {
-        minWidth: "500px", 
         maxWidth: "1150px",
         width: "100%",
         height: "100%",
@@ -46,14 +45,14 @@ const style = {
         border: "solid 0.5px rgba(255, 255, 255, 0.1)",
         fontSize: "12px",
         fontFamily: "Montserrat, bold",
-        boxShadow: "0px 15px 50px -6px rgba(0, 0, 0, 0.3)",
+        boxShadow: "0px 15px 40px -6px rgba(0, 0, 0, 0.05)",
         backgroundColor: "rgba(24, 25, 26, 1)",
         display: "grid",
         gridTemplateColumns: "200px auto",
         gridTemplateRows: "75px 45px auto 75px",
         "@media screen and (max-width: 768px)": {
             gridTemplateColumns: "110px auto",
-            minWidth: 0
+            border: "none" as "none"
         }
     },
     appbg: {

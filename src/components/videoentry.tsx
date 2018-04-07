@@ -13,10 +13,10 @@ const style = {
     entry: {
         boxSizing: "border-box" as "border-box",
         position: "relative" as "relative",
-        width: "calc(100%)",
+        width: "calc(100% - 2px)",
         height: "100px",
-        margin: "15px 0px",
-        padding: "0px 15px",
+        margin: "15px 1px",
+        padding: "0px 14px",
         borderTop: "solid 1px rgba(0, 0, 0, 0.3)",
         borderBottom: "solid 1px rgba(0, 0, 0, 0.3)",
         overflow: "hidden" as "hidden",

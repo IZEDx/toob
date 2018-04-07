@@ -33,8 +33,8 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
         super(props);
 
         this.state = {
-            saveMp3: new ButtonState(false, false, "MP3"),
-            saveMp4: new ButtonState(false, false, "MP4")
+            saveMp3: new ButtonState(false, false, "mp3s.zip"),
+            saveMp4: new ButtonState(false, false, "mp4s.zip")
         };
     }
 
@@ -43,7 +43,7 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
             container: {
                 position: "relative" as "relative",
                 padding: "0px 10px",
-                backgroundColor: "rgba(150, 150, 150, 0.13)",
+                backgroundColor: "rgba(70, 70, 70, 0.43)",
                 borderTop: "solid 1px rgba(255, 255, 255, 0.04)",
                 gridColumn: "1/span 2",
                 boxSizing: "border-box" as "border-box",
@@ -101,7 +101,7 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
         saveToFile(await zip.generateAsync({type:"blob"}), "toobmp3.zip");
 
         this.setState({
-            saveMp3: new ButtonState(false, false, "MP3")
+            saveMp3: new ButtonState(false, false, "mp3s.zip")
         });
     }
 
@@ -120,7 +120,7 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
         saveToFile(await zip.generateAsync({type:"blob"}), "toobmp4.zip");
 
         this.setState({
-            saveMp4: new ButtonState(false, false, "MP4")
+            saveMp4: new ButtonState(false, false, "mp4s.zip")
         });
     }
 

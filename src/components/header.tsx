@@ -5,8 +5,9 @@ import * as Radium from "radium";
 const style = {
     header: {
         userSelect: "none" as "none",
-        "@media screen and (max-width: 880px)": {
-            width: "75px"
+        overflow: "hidden" as "hidden",
+        "@media screen and (max-width: 768px)": {
+            width: "92px"
         }
     },
     icon: {
@@ -19,8 +20,9 @@ const style = {
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat" as "no-repeat",
         backgroundPosition: "center",
-        "@media screen and (max-width: 880px)": {
-            width: "100%"
+        transition: "width 0.1s",
+        "@media screen and (max-width: 768px)": {
+            width: "calc(100% - 18px)"
         }
     },
     title: {
@@ -34,7 +36,7 @@ const style = {
         fontFamily: "Dhurjati, sans-serif",
         color: "#ffffff",
         verticalAlign: "center",
-        "@media screen and (max-width: 880px)": {
+        "@media screen and (max-width: 770px)": {
             display: "none"
         }
     }

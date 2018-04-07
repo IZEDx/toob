@@ -34,7 +34,7 @@ export class Button extends React.Component<ButtonProps, ButtonState> {
                 margin: "none",
                 minWidth: "60px",
                 padding: "10px 10px",
-                color: color,
+                color: "rgba(255,255,255,1)",
                 fontSize: "20px",
                 textAlign: "center" as "center",
                 textShadow: "0px 0px 10px rgba(0,0,0,0.4)",
@@ -44,9 +44,9 @@ export class Button extends React.Component<ButtonProps, ButtonState> {
                 opacity: 0.7,
                 ":hover": {
                     opacity: 1,
-                    backgroundColor: "rgba(255,255,255,0.02)",
-                    outline: "solid 1.5px rgba(0,0,0,0.1)",
-                    textShadow: "0px 0px 5px rgba(0,0,0,0.5)",
+                    backgroundColor: "rgba(255,255,255,0.04)",
+                    outline: "solid 1.5px rgba(255,255,255,0.1)",
+                    textShadow: "0px 0px 5px rgba(0,0,0,0.6)",
                     cursor: "pointer"
                 },
                 ":disabled": {
@@ -56,17 +56,20 @@ export class Button extends React.Component<ButtonProps, ButtonState> {
                 }
             }},
             icon: {
+                display: "none",
                 position: "absolute" as "absolute",
                 left: "50%",
                 top: "50%",
-                fontSize: "20px",
+                fontSize: "18px",
                 transform: "translate(-50%, -50%) scale(2.5)",
-                opacity: 0.2
+                opacity: 0.6,
+                "@media screen and (max-width: 768px)": {
+                    display: "block"
+                }
             },
             buttonText: {
                 marginLeft: "5px",
-                color: "rgba(255,255,255,1)",
-                "@media screen and (max-width: 280px)": {
+                "@media screen and (max-width: 768px)": {
                     display: "none"
                 }
             }
