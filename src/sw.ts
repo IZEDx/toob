@@ -1,35 +1,45 @@
 
-self.addEventListener("install", (event: any) => event.waitUntil((async () => {
+async function onInstall() {
+    console.log("toob.host ServiceWorker installed.");
     const cache = await caches.open("toob");
     cache.addAll([
-        '/img/Logo_250.png',
-        '/img/Background_cropped.png',
-        '/ffmpeg-worker-mp4.js',
-        '/toob.js',
-        '/sw.js',
-        '/index.html',
-        '/favicon.ico'
+        "/img/Logo_250.png",
+        "/img/Background_cropped.png",
+        "/ffmpeg-worker-mp4.js",
+        "/toob.js",
+        "/sw.js",
+        "/index.html",
+        "/favicon.ico"
     ]);
-})()));
+}
 
-self.addEventListener('fetch', (event: any) => event.respondWith((async () => {
+function parallel<T extends () => Promise<K>, K = void>(...fns: T[]): Promise<K[]> {
+    return Promise.all(fns.map(fn => fn()));
+}
+
+async function onFetch(event: ServiceWorkerEvent) {
     let response: Response = await caches.match(event.request);
     if (!response) {
         response = await fetch(event.request.clone());
 
-        if(!response || response.status !== 200 || response.type !== 'basic') {
+        if(!response || response.status !== 200 || response.type !== "basic") {
           return response;
         }
 
-        const cache = await caches.open("toob");
-        cache.put(event.request, response.clone());
+        parallel(async () => {
+            const cache = await caches.open("toob");
+            cache.put(event.request, response.clone());
+        });
     }
     return response;
-})()));
+}
 
-self.addEventListener('activate', (event: any) => event.waitUntil((async () => {
+async function onActivate() {
+    console.log("toob.host ServiceWorker activated, clearing cache.");
     const keys = await caches.keys();
-    await Promise.all(
-        keys.filter(key => key === "/sw.js").map(key => caches.delete(key))
-    );
-})()));
+    keys.map(key => caches.delete(key));
+}
+
+self.addEventListener("fetch", event => (event as ServiceWorkerEvent).respondWith(onFetch(event as ServiceWorkerEvent)));
+self.addEventListener("activate", event => (event as ServiceWorkerEvent).waitUntil(onActivate()));
+self.addEventListener("install", event => (event as ServiceWorkerEvent).waitUntil(onInstall()));
