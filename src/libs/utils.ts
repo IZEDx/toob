@@ -56,3 +56,11 @@ export function saveToFile(data: Blob|Uint8Array, filename: string) {
     saveAs(blob, filename);
 }
 
+
+export namespace Style {
+    export const absolute: "absolute" = "absolute";
+    export const borderBox: "border-box" = "border-box";
+    export const column: "column" = "column";
+    export const noRepeat: "no-repeat" = "no-repeat";
+    export const relative: "relative" = "relative";
+}
