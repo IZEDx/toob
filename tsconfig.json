@@ -13,6 +13,10 @@
         "jsx": "react",
         "noUnusedLocals": true,
         "suppressImplicitAnyIndexErrors": true,
+        "baseUrl": "./src",
+        "paths": {
+            "@libs/*": [ "libs/*" ]
+        },
         "lib": [
             "dom",
             "es2017",

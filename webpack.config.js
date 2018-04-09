@@ -12,6 +12,9 @@ module.exports = {
         publicPath: '/'
     },
     resolve: {
+        alias: {
+            "@libs": path.join(__dirname, "src", "libs")
+        },
         extensions: ['.ts', '.tsx', '.js', '.json']
     },
     module: {
