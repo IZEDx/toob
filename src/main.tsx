@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { render } from "react-dom";
+import * as Radium from "radium";
 
 import { FFmpegWorker } from "./libs/ffmpeg";
 import { App } from "./components/app";
@@ -15,7 +16,11 @@ const windowEvent = (event: string) => new Promise(resolve => window.addEventLis
  */
 async function main() {
 
-    const app = (<App/>);
+    const app = (
+        <Radium.StyleRoot>
+            <App />
+        </Radium.StyleRoot>
+    );
     
     FFmpegWorker.singleton();
 
