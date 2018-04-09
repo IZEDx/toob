@@ -57,7 +57,7 @@ const style = {
             zIndex: 1,
             maxWidth: "1150px",
             gridTemplateColumns: "200px auto",
-            boxShadow: "0px 15px 40px -6px rgba(0, 0, 0, 0.05)",
+            boxShadow: "0px 15px 40px -3px rgba(0, 0, 0, 0.1)",
             border: "solid 0.5px rgba(255, 255, 255, 0.1)",
             backgroundColor: "rgba(24, 25, 26, 0.97)"
         }
@@ -90,11 +90,15 @@ const style = {
         "@media screen and (min-width: 768px)": {
             gridArea: "3 / 2 / span 1 / span 1",
             display: "block",
-            justifySelf: "right",
-            fontSize: "12px",
+            maxWidth: "1150px",
+            width: "100%",
+            justifySelf: "center",
+            textAlign: "right",
+            padding: "3px",
+            fontSize: "14px",
             fontFamily: "Montserrat, bold",
-            opacity: "0.7",
-            color: "#ffffff"
+            opacity: "0.35",
+            color: "#ffffff",
         }
     }
 }
@@ -185,6 +189,7 @@ export const App = Radium(class extends React.Component<{}, AppState> {
                     <BulkActions entries={this.state.entries} elements={videoentries} />
                 </div>
                 <div style={style.footer}>
+                    &copy; 2017-2018 <a href="https://ized.io/" style={{color: "#ffffff"}}>ized.io</a>
                 </div>
             </div>
         );
