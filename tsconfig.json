@@ -1,31 +1,26 @@
 {
-    "compileOnSave": true,
     "compilerOptions": {
-        "target": "es2015",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "pretty": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "removeComments": true,
-        "strict": true,
-        "jsx": "react",
-        "noUnusedLocals": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "baseUrl": "./src",
-        "paths": {
-            "@libs/*": [ "libs/*" ]
-        },
-        "lib": [
-            "dom",
-            "es2017",
-            "esnext.asynciterable"
-        ],
-        "outDir": "dist"
+      "allowSyntheticDefaultImports": true,
+      "allowUnreachableCode": false,
+      "declaration": false,
+      "experimentalDecorators": true,
+      "lib": [
+        "dom",
+        "esnext"
+      ],
+      "moduleResolution": "node",
+      "module": "es2015",
+      "target": "es2015",
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "jsx": "react",
+      "jsxFactory": "h"
     },
+    "include": [
+      "src"
+    ],
     "exclude": [
-        "node_modules",
-        "tests"
+      "node_modules"
     ]
   }
+  
