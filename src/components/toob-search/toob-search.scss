@@ -1,0 +1,44 @@
+
+toob-search {
+    .search {
+        position: relative;
+        height: 55px;
+        background-color: rgba(150, 150, 150, 0.15);
+        padding: 10px 30px;
+        border-left: solid 1px rgba(0, 0, 0, 0.5);
+        border-bottom: solid 1px rgba(0, 0, 0, 0.5);
+        box-shadow: inset 5px -20px 40px -10px rgba(0, 0, 0, 0.17);
+        overflow: hidden;
+    
+        :focus > .icon {
+            transform: rotateZ(45) scale(1.5);
+        }
+
+        .icon {
+            position: absolute;
+            right: 20px;
+            line-height: 55px;
+            vertical-align: middle;
+            height: 55px;
+            font-size:  100px;
+            color: rgba(255,255,255,0.15);
+            transition: transform 0.5s ease-in;
+        }
+
+        .input {
+            height: 22px;
+            width: 100%;
+            padding-top: 17px;
+            line-height: 20px;
+            background: transparent;
+            font-size: 20px;
+            font-family: Montserrat, bold;
+            color: #e0e2e4;
+            border: none;
+            vertical-align: bottom;
+            :focus {
+                outline: none;
+            }
+        }
+    }
+}
