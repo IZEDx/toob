@@ -30,7 +30,7 @@ export class ToobVideo {
     private progressBarTimer: number|undefined;
     private waitForStatusUpdate: Function[] = [];
 
-    @Event() onStatusUpdate: EventEmitter<{video: ToobVideo, status: VideoStatus}>;
+    @Event() statusUpdate: EventEmitter<{video: ToobVideo, status: VideoStatus}>;
     @Prop() data: SearchResult;
     
     @State() status = VideoStatus.added;
@@ -48,14 +48,14 @@ export class ToobVideo {
             await this.convert();
         }
 
-        this.onStatusUpdate.emit({video: this, status: this.status});
+        this.statusUpdate.emit({video: this, status: this.status});
     }
     
     setStatus(status: VideoStatus) {
         this.status = status;
         this.waitForStatusUpdate.forEach(fn => setTimeout(fn, 0));
         this.waitForStatusUpdate = [];
-        this.onStatusUpdate.emit({video: this, status: this.status});
+        this.statusUpdate.emit({video: this, status: this.status});
     }
 
     async download() {
