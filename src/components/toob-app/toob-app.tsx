@@ -22,16 +22,45 @@ export class ToobApp {
 	componentDidLoad() {
 	}
 
-    @Listen("onFound")
+    @Listen("found")
     handleFound(result: SearchResult) {
         if (this.entries.find(e => e.id === result.id)) return;
         this.entries = [...this.entries, result]
     }
 
+    changeSetting<T extends keyof AppSettings>(key: T) {
+        return (checked: boolean) => {
+            const settings = Object.assign({}, this.settings);
+            settings[key] = checked;
+            localStorage.setItem(key, ""+checked);
+            this.settings = settings;
+        }
+    }
+
 	render() {
 		return (
-			<div>
-			</div>
+            <div class="container">
+                <div class="background" />
+                <div class="body">
+                    <div class="background" />
+                    <div class="header">
+                        <div class="icon" />
+                        <div class="title" >toob.host</div>
+                    </div>
+                    <toob-search />
+                    <div class="settings">
+                        <toob-checkbox checked={this.settings.autoconvert} onChanged={this.changeSetting("autoconvert")}>
+                            Auto-Convert
+                        </toob-checkbox>
+                        <toob-checkbox checked={this.settings.autodownload} onChanged={this.changeSetting("autodownload")}>
+                            Auto-Download
+                        </toob-checkbox>
+                    </div>
+                </div>
+                <div class="footer">
+                    &copy; 2017-2018 <a href="https://ized.io/">ized.io</a>
+                </div>
+            </div>
 		);
 	}
 }

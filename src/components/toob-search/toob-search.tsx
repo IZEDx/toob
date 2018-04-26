@@ -36,8 +36,8 @@ export interface SearchResult {
 })
 export class ToobSearch {
 
-    @Event() onSearching: EventEmitter<string>;
-    @Event() onFound: EventEmitter<SearchResult>;
+    @Event() searching: EventEmitter<string>;
+    @Event() found: EventEmitter<SearchResult>;
 
     @State() rotation = 0;
 
@@ -70,7 +70,7 @@ export class ToobSearch {
         this.spinTimer = setInterval(() => this.spinIcon(), 500) as any;
 
         try {
-            this.onSearching.emit(val);
+            this.searching.emit(val);
 
             const info = await getInfo(val);
             const format = info.formats.sort((a, b) => a.audioBitrate > b.audioBitrate ? -1 : 1)[0];
@@ -83,7 +83,7 @@ export class ToobSearch {
                 this.inputElement.focus();
             }
             
-            this.onFound.emit({
+            this.found.emit({
                 id: info.video_id, 
                 title: info.title, 
                 thumbnail: info.thumbnail_url,
