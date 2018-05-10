@@ -102,7 +102,7 @@ export class ToobSearch {
 
 	render() {
 		return (
-			<div class="search">
+			<section class="search">
                 <i 
                     style={{transform: `rotateZ(${this.rotation}deg)`}}
                     class="fa fa-search icon" 
@@ -116,7 +116,7 @@ export class ToobSearch {
                     onFocus={() => this.handleFocus()}
                     onBlur={() => this.handleBlur()}
                 />
-			</div>
+			</section>
 		);
 	}
 }

@@ -1,5 +1,5 @@
 
-toob-button {
+toob-app {
     position: absolute;
     box-sizing: border-box;
     left: 0;
@@ -9,11 +9,11 @@ toob-button {
     display: grid;
     grid-template: "[app] auto / [app] auto";
 
-    .background {
+    aside.background {
         display: none;
     }
 
-    .body {
+    main {
         position: relative;
         grid-area: "app";
         display: grid;
@@ -25,12 +25,12 @@ toob-button {
         grid-template-rows: 75px 45px auto 75px;
         grid-template-columns: 110px auto;
         
-        .background {
+        aside.background {
             z-index: -1;
             display: none;
         }
 
-        .settings {
+        section.settings {
             display: flex;
             justify-content: flex-end;
             grid-column: 1 / span 2;
@@ -38,12 +38,18 @@ toob-button {
             user-select: none;
         }
 
-        .header {
+        section.videos {
+            box-sizing: border-box;
+            grid-column: 1 / span 2;
+            overflow: auto;
+        }
+
+        header {
             user-select: none;
             overflow: hidden;
             width: 92px;
 
-            .icon {
+            section.icon {
                 float: left;
                 margin-left: 18px;
                 margin-right: -13px;
@@ -56,13 +62,13 @@ toob-button {
                 transition: width 0.1s;
             }
 
-            .title {
+            section.title {
                 display: none; 
             }
         }
     }
 
-    .footer {
+    footer {
         display: none;
     }
 
@@ -70,7 +76,7 @@ toob-button {
         background: linear-gradient(to bottom, #2D1313 150px, #131313 40%);
         grid-template: "75px [app] auto 30px 45px / 100px [app] auto 100px";
         
-        .background {
+        aside.background {
             display: block;
             z-index: 0;
             position: absolute;
@@ -86,7 +92,7 @@ toob-button {
             filter: blur(4px) grayscale(60%);
         }
 
-        .body {
+        main {
             z-index: 1;
             max-width: 1150px;
             grid-template-columns: 200px auto;
@@ -94,7 +100,7 @@ toob-button {
             border: solid 0.5px rgba(255, 255, 255, 0.1);
             background-color: rgba(24, 25, 26, 0.97);
 
-            .background {
+            aside.background {
                 display: block;
                 position: absolute;
                 background-image: url(./img/Background_cropped.png);	
@@ -108,14 +114,14 @@ toob-button {
                 transform: translate3d(0,0,0);
             }
 
-            .header {
+            header {
                 width: auto;
 
-                .icon {
+                section.icon {
                     width: 25%;
                 }
 
-                .title {
+                section.title {
                     display: block;
                     float: left;
                     height: 70px;
@@ -129,7 +135,7 @@ toob-button {
             }
         }
 
-        .footer {
+        footer {
             grid-area: 3 / 2 / span 1 / span 1;
             display: block;
             max-width: 1150px;

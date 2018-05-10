@@ -48,33 +48,36 @@ export class ToobApp {
     }
 
 	render() {
-        const videoentries: JSX.Element[] = []
+        const videoelements: JSX.Element[] = []
 		return [
-            <div class="background" />,
-            <div class="body">
-                <div class="background" />
-                <div class="header">
-                    <div class="icon" />
-                    <div class="title" >toob.host</div>
-                </div>
+            <aside class="background" />,
+            <main>
+                <aside class="background" />
+                <header>
+                    <section class="icon" />
+                    <section class="title" >toob.host</section>
+                </header>
                 <toob-search />
-                <div class="settings">
+                <section class="settings">
                     <toob-checkbox checked={this.settings.autoconvert} onChanged={this.changeSetting("autoconvert")}>
                         Auto-Convert
                     </toob-checkbox>
                     <toob-checkbox checked={this.settings.autodownload} onChanged={this.changeSetting("autodownload")}>
                         Auto-Download
                     </toob-checkbox>
-                </div>
-                <toob-list>
-                    { this.entries.map(entry => (
-                        <toob-video data={entry} />
-                    )) }
-                </toob-list>
-            </div>,
-            <div class="footer">
+                </section>
+                <section class="videos">
+                    { this.entries.map(entry => {
+                        const el = <toob-video data={entry} />;
+                        videoelements.push(el);
+                        return el;
+                    }) }
+                </section>
+                <toob-bulkactions entries={this.entries} elements={videoelements} />
+            </main>,
+            <footer>
                 &copy; 2017-2018 <a href="https://ized.io/">ized.io</a>
-            </div>
+            </footer>
         ];
 	}
 }
