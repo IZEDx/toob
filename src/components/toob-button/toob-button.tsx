@@ -1,5 +1,5 @@
 import '@stencil/core';
-import { Component, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 @Component({
 	tag: 'toob-button',
@@ -11,14 +11,14 @@ export class ToobButton {
 
     @Prop() color?: string;
     @Prop() disabled?: boolean;
-    @Prop() hidden?: boolean;
+    @Prop() _hidden?: boolean;
     @Prop() icon: string;
 
 	componentDidLoad() {
 	}
 
 	render() {
-		return this.hidden ? undefined : (
+		return this._hidden ? undefined : (
             <button
                 onClick={(e) => this.onClick.emit(e)}
                 disabled={this.disabled}

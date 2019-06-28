@@ -1,4 +1,4 @@
-
+/*
 import * as React from "react";
 import * as Radium from "radium";
 import * as JSZip from "jszip";
@@ -140,3 +140,4 @@ export const BulkActions = Radium(class extends React.Component<BulkActionsProps
         );
     }
 });
+*/

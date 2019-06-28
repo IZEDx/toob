@@ -1,4 +1,4 @@
-
+/*
 import * as React from "react";
 import * as Radium from "radium";
 
@@ -195,3 +195,5 @@ export const App = Radium(class extends React.Component<{}, AppState> {
         );
     }
 });
+
+*/

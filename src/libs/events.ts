@@ -34,7 +34,7 @@ export class EventEmitter {
     }
 
     once(event: string, fn?: (args: any) => void): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<any>((resolve) => {
             const unsubscribe = this.on(event, (...args: any[]) => {
                 unsubscribe();
                 if (!!fn) {

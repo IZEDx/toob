@@ -1,7 +1,8 @@
 import '@stencil/core';
-import { Component, State, Listen } from '@stencil/core';
+import { Component, h, JSX, State, Listen } from '@stencil/core';
 import { SearchResult } from "../toob-search/toob-search";
-import { ToobVideo, VideoStatus } from "../toob-video/toob-video";
+import { ToobVideo } from "../toob-video/toob-video";
+import { VideoStatus } from "../../libs/youtube";
 
 interface AppSettings {
     autodownload: boolean;
@@ -39,10 +40,10 @@ export class ToobApp {
     }
 
     changeSetting<T extends keyof AppSettings>(key: T) {
-        return (checked: boolean) => {
+        return (event: CustomEvent<boolean>) => {
             const settings = Object.assign({}, this.settings);
-            settings[key] = checked;
-            localStorage.setItem(key, ""+checked);
+            settings[key] = event.detail;
+            localStorage.setItem(key, ""+event.detail);
             this.settings = settings;
         }
     }

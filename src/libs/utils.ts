@@ -20,7 +20,7 @@ export function fetch(url: string, opts: FetchOptions = {}, cors: string = "cors
     return new Promise<ArrayBuffer>((res, rej) => {
         const xhr = new XMLHttpRequest();
         xhr.open(opts.method || "get", url);
-        xhr.onload = e => {
+        xhr.onload = () => {
             res(xhr.response);
         }
         xhr.onerror = e => {

@@ -49,7 +49,7 @@ export function parse(videotitle: string) : IParseResult|string {
 
     const interprets = parts[0]
         .split(/([&+,]|feat\.)+/i)
-        .filter((s, i) => i % 2 === 0)
+        .filter((_, i) => i % 2 === 0)
         .map(s => s.trim());
 
     const { title, tags } = parseTitle(parts[1]);

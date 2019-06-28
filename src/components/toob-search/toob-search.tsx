@@ -1,5 +1,5 @@
 import '@stencil/core';
-import { Component, State, Event, EventEmitter } from '@stencil/core';
+import { Component, h, State, Event, EventEmitter } from '@stencil/core';
 
 (function() {
     const cors_api_host = 'cors.ized.io';
@@ -18,7 +18,7 @@ import { Component, State, Event, EventEmitter } from '@stencil/core';
     };
 })();
 
-import { getInfo } from "ytdl-core";
+const { getInfo } = require("ytdl-core");
 
 export interface SearchResult {
     id: string;

@@ -1,15 +1,13 @@
 import '@stencil/core';
-import { Component, State, Event, Prop, EventEmitter } from '@stencil/core';
+import { Component, h, State, Event, Prop, EventEmitter } from '@stencil/core';
 import sanitize from "sanitize-filename";
 
 import { FFmpegWorker } from "../../libs/ffmpeg";
 import { saveToFile, downloadFile } from "../../libs/utils";
 
 import { SearchResult } from "../toob-search/toob-search";
+import { VideoStatus } from '../../libs/youtube';
 
-export enum VideoStatus {
-    added, downloading, downloaded, converting, converted
-}
 
 class ButtonState {
     constructor(

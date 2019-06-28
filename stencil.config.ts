@@ -1,8 +1,10 @@
-const sass = require('@stencil/sass');
+import { Config } from '@stencil/core';
+import { sass } from '@stencil/sass';
+import nodePolyfills from 'rollup-plugin-node-polyfills';
 
-exports.config = {
+export const config: Config = {
     namespace: "toob",
-    outputTarget: [
+    outputTargets: [
         {
             type: 'www',
             serviceWorker: {
@@ -12,7 +14,8 @@ exports.config = {
     ],
     globalStyle: 'src/global/style.scss',
     plugins: [
-        sass()
+        sass(),
+        nodePolyfills()
     ],
     copy: [
         { src: 'node_modules/ffmpeg.js/ffmpeg-worker-mp4.js' }

@@ -12,20 +12,21 @@
     "start": "npm run dev"
   },
   "dependencies": {
-    "browser-filesaver": "^1.1.1",
-    "ffmpeg.js": "^3.1.9001",
-    "jszip": "^3.1.5",
-    "sanitize-filename": "^1.6.1",
-    "ytdl-core": "^0.20.2",
     "@stencil/core": "latest",
-    "@stencil/router": "latest"
+    "@stencil/router": "latest",
+    "browser-filesaver": "^1.1.1",
+    "ffmpeg.js": "latest",
+    "jszip": "latest",
+    "sanitize-filename": "latest",
+    "ytdl-core": "latest"
   },
   "devDependencies": {
-    "@types/jszip": "^3.1.3",
-    "@types/sanitize-filename": "^1.1.28",
     "@stencil/dev-server": "latest",
     "@stencil/sass": "latest",
     "@stencil/utils": "latest",
-    "typescript": "^2.9.0-dev.20180412"
+    "@types/jszip": "latest",
+    "@types/sanitize-filename": "latest",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "typescript": "^3.5.2"
   }
 }

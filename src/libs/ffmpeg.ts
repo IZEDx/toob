@@ -137,7 +137,7 @@ class FFmpegWorker extends EventWorker {
                 throw new Error("Could not convert file.");
             }
     
-            setImmediate(task.done(tou8(results[0].MEMFS[0].data)));
+            setImmediate(() => task.done(tou8(results[0].MEMFS[0].data)));
         });
     }
 
