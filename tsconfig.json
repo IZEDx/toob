@@ -1,31 +1,32 @@
 {
-    "compileOnSave": true,
     "compilerOptions": {
-        "target": "es2015",
         "module": "commonjs",
         "moduleResolution": "node",
+        "newLine": "LF",
+        "target": "esnext",
         "sourceMap": true,
         "pretty": true,
+        "jsx": "react",
+        "jsxFactory": "h",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "removeComments": true,
         "strict": true,
-        "jsx": "react",
-        "noUnusedLocals": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "baseUrl": "./src",
-        "paths": {
-            "@libs/*": [ "libs/*" ]
-        },
+        "declaration": false,
         "lib": [
-            "dom",
-            "es2017",
-            "esnext.asynciterable"
+            "esnext",
+            "dom"
         ],
-        "outDir": "dist"
+        "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "shared/*": [ "/src/shared/*" ],
+            "frontend/*": [ "/src/frontend/*" ],
+            "backend/*": [ "/src/backend/*" ]
+        }
     },
     "exclude": [
-        "node_modules",
-        "tests"
+      "types",
+      "node_modules"
     ]
   }

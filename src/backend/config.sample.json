@@ -1,0 +1,7 @@
+{
+    "session_secret": "replace me",
+    "admin_password": "",
+    "ports": {
+        "admin": 3330
+    }
+}

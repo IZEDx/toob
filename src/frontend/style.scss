@@ -1,0 +1,402 @@
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+body {
+    font-family: Montserrat, bold;
+    background-color: #ffffff;
+    overflow: hidden;
+    color: #222222;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+
+    a {
+        &:visited {
+            color: #222222;
+        }
+    }
+
+    div 
+    {
+        color: #ededed;
+        font-family: Montserrat, bold;
+        font-size: 15px;
+    }
+    
+    main
+    {
+        width: 100vw;
+        height: 100vh;
+    }
+}
+
+#app-container
+{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    box-sizing: border-box;
+    --bg-color: #7D7DDD;
+    background-color: var(--bg-color);
+    transition: background-color 0.5s;
+    left: 0;
+    top: 0;
+    display: grid;
+    grid-template: [app] auto / [app] auto;
+
+    .app-background
+    {
+        display: none;
+    }
+
+    .app
+    {
+        grid-area: app;
+        width: 100%;
+        justify-self: center;
+        display: grid;
+        grid-template: 50px auto / auto;
+
+        .btn
+        { 
+            box-sizing: border-box;
+        }
+
+        .checkbox
+        {
+            position: relative;
+            padding-left: 42px;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            background: none;
+            height: 36px;
+            line-height: 36px;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+
+            .box
+            {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 30px;
+                height: 30px;
+                box-sizing: border-box;
+                border: solid 0.5px rgba(255, 255, 255, 0.4);
+                color: rgba(255, 255, 255, 1);
+                font-size: 25px;
+                line-height: 30px;
+                vertical-align: center;
+                transition: border-color 0.2s;
+                margin: 3px !important;
+            }
+
+            &:hover>.box
+            {
+                border-color: rgba(255, 255, 255, 0.7);
+            }
+            &:focus>.box
+            {
+                border-color: rgba(255, 255, 255, 1);
+            }
+        }
+
+        input[type=text],
+        input[type=password]
+        {
+            box-sizing: border-box;
+            width: 100%;
+            padding-left: 5px;
+            height: 100%;
+            background: none;
+            border: none;
+            outline: none;
+            border-bottom: 2px solid;
+            border-color: rgba(255, 255, 255, 0.5);
+            transition: border-color 0.2s;
+            color: #dedede;
+            font-size: 16px;
+            &:hover
+            {
+                border-color: rgba(255, 255, 255, 0.7);
+            }
+            &:focus
+            {
+                border-color: rgba(255, 255, 255, 1);
+            }
+        }
+
+        .btn
+        {
+            background-color: rgba(255, 255, 255, 0.4);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-size: 16px;
+            border: 1px solid;
+            border-color: transparent;
+            transition: border-color 0.2s, background-color 0.2s;
+            
+            &:hover
+            {
+                border-color: rgba(255, 255, 255, 0.5);
+                background-color: rgba(255, 255, 255, 0.7);
+            }
+            &:focus
+            {
+                border-color: rgba(255, 255, 255, 0.7);
+            }
+        }
+
+        .header
+        {
+            height: 50px;
+            line-height: 50px;
+            font-size: 22px;
+            padding-left: 10px;
+            min-height: 50px;
+
+            .logo
+            {
+                padding: 10px 25px;
+                background-image: url(./img/birdcage.png);
+                background-size: contain;
+            }
+            
+            .right
+            {
+                float: right;
+                width: auto;
+
+                .btn
+                {
+                    height: 50px;
+                    width: 50px;
+                    font-size: 30px;
+                    background-color: rgba(255,255,255,0.1);
+                    border: none;
+    
+                    &:hover
+                    {
+                        background-color: rgba(255,255,255,0.3);
+                    }
+                }
+            }
+        }
+
+        .body
+        {
+            position: relative;
+            background-color: rgba(24, 25, 26, 0.92);
+
+            .hidden
+            {
+                display: none;
+            }
+
+            .overlay
+            {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(24, 25, 29, 0.72);
+                backdrop-filter: blur(20px);
+                z-index: 2;
+                
+                .settings
+                {
+                    --row-height: 50px;
+                    box-sizing: border-box;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    display: grid;
+                    grid-template: var(--row-height) / 100%;
+                    grid-auto-rows: var(--row-height);
+                    grid-gap: 10px;
+                    padding: 20px;
+                    width: 100%;
+
+                    .setting
+                    {
+                        display: grid;
+                        grid-template: 100% / auto var(--row-height)
+                    }
+                }
+
+                .login
+                {
+                    box-sizing: border-box;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    display: grid;
+                    grid-template: auto / auto auto;
+                    grid-gap: 10px;
+                    padding: 20px;
+                    width: 100%;
+
+                    .password
+                    {
+                        width: 100%;
+                        max-width: 300px;
+                        height: 30px;                  
+                    }
+                }
+            }
+
+            .routes
+            {
+                min-height: 0px;
+                overflow-y: auto;
+                max-height: 100vh;
+                padding: 0px 10px;
+
+                .routelist
+                {
+                    box-sizing: border-box;
+                    width: 100%;
+                    margin-top: 10px;
+
+                    .route
+                    {
+                        --row-height: 50px;
+                        box-sizing: border-box;
+                        display: grid;
+                        background-color: rgba(255,255,255,0.1);
+                        margin-bottom: calc(var(--row-height) / 5);
+                        grid-template: var(--row-height) var(--row-height) var(--row-height) / 1fr 1fr var(--row-height);
+                        height: var(--row-height);
+                        transition: height 0.2s;
+                        width: 100%;
+                        overflow: hidden;
+                    
+                        div, button
+                        {
+                            margin: 7px;
+                        }
+
+                        &.add
+                        {
+                            grid-template: var(--row-height) var(--row-height) var(--row-height) / 1fr 1fr;
+                        }
+
+                        .only-expanded
+                        {
+                            opacity: 0;
+                            transition: opacity 0.2s;
+                        }
+
+                        &.expanded
+                        {
+                            height: calc(var(--row-height) * 3);
+                            .only-expanded
+                            {
+                                opacity: 1;
+                            }
+                        }
+
+                        .source, .target, .email
+                        {
+                            line-height: 36px;
+                        }
+
+                        .addbtn
+                        {
+                            grid-column: 2;
+                            width: 36px;
+                            justify-self: right;
+                        }
+
+                        .delete
+                        {
+                            grid-column: 3;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 768px)
+{
+    #app-container
+    {
+        background: linear-gradient(to bottom, var(--bg-color) 25%, #1D1D1D 75%);
+        grid-template: 90px [app] auto 30px 45px / 100px [app] auto 100px !important;
+        transition: background 0.5s;
+
+        .app-background
+        {
+            display: block !important;
+            z-index: 0;
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            background-position: center center;
+            background-size: cover;
+            opacity: 0;
+            filter: grayscale(60%);
+            transition: opacity 1.5s ease;
+
+            &.visible
+            {
+                opacity: 0.7;
+            }
+        }
+
+        .app
+        {
+            z-index: 1;
+            max-width: 1150px;
+            box-shadow: 0px 15px 50px -6px rgba(0,0,0,0.3);
+
+            .header
+            {
+                backdrop-filter: blur(20px);
+                background-color: rgba(80, 80, 120, 0.3);
+                border: solid 0.5px rgba(0, 0, 0, 0.1);
+                border-bottom: none;
+            }
+
+            .body
+            {
+                background-color: rgba(24, 25, 29, 0.72);
+                backdrop-filter: blur(20px);
+                border: solid 0.5px rgba(255, 255, 255, 0.1);
+                max-height: calc(100vh - 215px);
+
+                .routes
+                {
+                    max-height: calc(100vh - 215px);
+                }
+
+                .overlay
+                {
+                    .settings
+                    {
+                        width: auto;
+                    }
+                    .login
+                    {
+                        width: auto;
+                    }
+                }
+            }
+        }
+    }
+}
+
