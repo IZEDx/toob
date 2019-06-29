@@ -43,7 +43,7 @@ body {
     box-sizing: border-box;
     --bg-color: #7D7DDD;
     background-color: var(--bg-color);
-    transition: background-color 0.5s;
+    transition: background-color 0.1s;
     left: 0;
     top: 0;
     display: grid;
@@ -161,11 +161,12 @@ body {
             font-size: 22px;
             padding-left: 10px;
             min-height: 50px;
+            background-color: rgba(30, 30, 30, 0.5);
 
             .logo
             {
                 padding: 10px 25px;
-                background-image: url(./img/birdcage.png);
+                background-image: url(./img/Logo_250.png);
                 background-size: contain;
             }
             
@@ -193,7 +194,7 @@ body {
         .body
         {
             position: relative;
-            background-color: rgba(24, 25, 26, 0.92);
+            background-color: rgba(24, 25, 26, 1);
 
             .hidden
             {
@@ -367,8 +368,8 @@ body {
             .header
             {
                 backdrop-filter: blur(20px);
-                background-color: rgba(80, 80, 120, 0.3);
-                border: solid 0.5px rgba(0, 0, 0, 0.1);
+                background-color: rgba(30, 30, 30, 0.5);
+                border: solid 0.5px rgba(0, 0, 0, 0.2);
                 border-bottom: none;
             }
 

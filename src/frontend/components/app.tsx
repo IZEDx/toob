@@ -1,18 +1,13 @@
 
 import { h, Component } from "preact";
-import { Login } from "./login";
-import { api } from "../api";
-import { Settings } from "./settings";
+import { Settings, SettingKeys, SettingValues } from "./settings";
 
 export interface AppProps {
 }
 
 interface AppState {
   backgroundImage: string;
-  authed: boolean;
   settings: boolean;
-  color: string;
-  bgtag: string;
 }
 
 export class App extends Component<AppProps, AppState> {
@@ -21,10 +16,7 @@ export class App extends Component<AppProps, AppState> {
         super(props);
         this.state = { 
             backgroundImage: "",
-            authed: false,
-            settings: false,
-            color: localStorage.getItem("color") || "#7D7DDD",
-            bgtag: localStorage.getItem("bgtag") || "colorful"
+            settings: false
         };
     }
 
@@ -39,47 +31,34 @@ export class App extends Component<AppProps, AppState> {
 
     async componentDidMount()
     {
-        this.loadBackground(this.state.bgtag);
-        const app = document.getElementById("app-container");
-        if (app) app.style.setProperty("--bg-color", this.state.color);
-    }
-
-    onAuth()
-    {
-        this.setState({authed: true})
     }
 
     toggleSettings()
     {
         this.setState({settings: !this.state.settings});
     }
-    
-    async onLogout()
-    {
-        const {data} = await api.delete("/auth");
-        if (data.success)
-        {
-            location.reload(true);
-        }
-        else
-        {
-            alert(data.error);
-        }
-    }
 
     onChangeColor(newColor: string)
     {
-        localStorage.setItem("color", newColor);
-        const app = document.getElementById("app-container");
-        if (app) app.style.setProperty("--bg-color", newColor);
-        this.setState({color: newColor});
     }
 
     onChangeBg(bgtag: string)
     {
-        localStorage.setItem("bgtag", bgtag);        
-        this.loadBackground(bgtag);
-        this.setState({bgtag: bgtag});
+    }
+
+    onSettingChanged<P extends SettingKeys>(setting: P, value: SettingValues[P])
+    {
+        switch (setting)
+        {
+            case "color":
+                const app = document.getElementById("app-container");
+                if (app) app.style.setProperty("--bg-color", value as string);
+                break;
+
+           case "bgtag":      
+                this.loadBackground(value as string);
+                break;
+        }
     }
 
     render(props: AppProps, state: AppState) {
@@ -92,27 +71,19 @@ export class App extends Component<AppProps, AppState> {
                     <div className="app">
                         <div className="header">
                             <span className="logo" />
-                            node-preact-template
-                            {!state.authed ? "" : 
-                                <div className="right">
-                                    <button type="button" onClick={this.toggleSettings.bind(this)} className="btn settings">
-                                        <i className="fa fa-gear"></i>
-                                    </button>
-                                    <button type="button" onClick={this.onLogout.bind(this)} className="btn logout">
-                                        <i className="fa fa-sign-out"></i>
-                                    </button>
-                                </div>
-                            }                            
+                            toob
+                            <div className="right">
+                                <button type="button" onClick={this.toggleSettings.bind(this)} className="btn settings">
+                                    <i className="fa fa-gear"></i>
+                                </button>
+                            </div>                  
                         </div>
                         <div className="body">
                             <div className={state.settings ? "overlay" : "hidden"}>
-                                <Settings onClose={this.toggleSettings.bind(this)} 
-                                    color={this.state.color} onChangeColor={this.onChangeColor.bind(this)} 
-                                    bgtag={this.state.bgtag} onChangeBg={this.onChangeBg.bind(this)} 
+                                <Settings 
+                                    onChange={this.onSettingChanged.bind(this)} 
+                                    onClose={this.toggleSettings.bind(this)} 
                                 />
-                            </div>
-                            <div className={state.authed ? "hidden" : "overlay"}>
-                                <Login onAuth={this.onAuth.bind(this)}/>
                             </div>
                         </div>
                     </div>

@@ -1,67 +1,89 @@
 
 import { h, Component } from "preact";
-import { api } from "../api";
 import { Input } from "./input";
+import { Checkbox } from "./checkbox";
+
+
+const defaultSettings = {
+    autoDownload: false,
+    color: "#FD1222",
+    bgtag: "mountain"
+}
+
+export type SettingValues = typeof defaultSettings;
+
+export type SettingKeys = keyof SettingValues;
+
+export type SettingsState = { 
+    [P in SettingKeys]: SettingValues[P];
+};
 
 export interface SettingsProps
 {
-    color: string;
-    bgtag: string;
     onClose(): void;
-    onChangeColor(color: string): void;
-    onChangeBg(bgtag: string): void;
-}
-interface SettingsState
-{
-    color: string;
-    bgtag: string;
-    password: string;
+    onChange<P extends SettingKeys>(setting: P, value: SettingValues[P]): void;
 }
 
 export class Settings extends Component<SettingsProps, SettingsState> {
+
     constructor(props: SettingsProps) {
         super(props);
-        this.state = {
-            password: "",
-            bgtag: this.props.bgtag,
-            color: this.props.color
-        };
+        this.state = this.loadSettings();
     }
 
-    async onSetPassword()
+    loadSettings()
     {
-        const {data} = await api.put("/auth", {password: this.state.password});
-        if (data.success)
+        const state = {} as SettingsState;
+        for (const key in defaultSettings)
         {
-            this.props.onClose();
-            this.setState({password: ""});
+            let val = (defaultSettings as any)[key] as string|boolean|number;
+
+            if (typeof val === "string" ) val = localStorage.getItem(key) || val;
+            if (typeof val === "boolean") val = (localStorage.getItem(key) === "true") || val;
+            if (typeof val === "number") val = localStorage.getItem(key) || val;
+
+            (state as any)[key] = val;
+            setTimeout(() => this.props.onChange(key as any, val), 0);
         }
-        else
-        {
-            alert(data.error);
-        }
+        return state;
+    }
+
+    updateSetting<P extends SettingKeys>(setting: P, value: SettingValues[P])
+    {
+        this.setState({
+            [setting]: value
+        } as any);
+        this.props.onChange(setting, value);
+        localStorage.setItem(setting, ""+value);
     }
 
     render() {
         return (
             <div className="settings">
                 <div className="setting">
-                    <Input type="password" placeholder="Password" onChanged={val => this.setState({password: val})} onSubmit={this.onSetPassword.bind(this)} />
-                    <button type="button" onClick={this.onSetPassword.bind(this)} className="btn">
-                        <i className="fa fa-save"></i>
-                    </button>
+                    <Checkbox 
+                        label="Auto-Download" 
+                        checked={this.state.autoDownload} 
+                        onChanged={val => this.updateSetting("autoDownload", val)}
+                    />
                 </div>
                 <div className="setting">
-                    <Input type="text" placeholder="Color" value={this.props.color} onChanged={val => this.setState({color: val})} onSubmit={() => this.props.onChangeColor(this.state.color)} />
-                    <button type="button" onClick={() => this.props.onChangeColor(this.state.color)} className="btn">
-                        <i className="fa fa-save"></i>
-                    </button>
+                    <Input 
+                        type="text" 
+                        placeholder="Color" 
+                        value={this.state.color} 
+                        onChanged={val => this.updateSetting("color", val)} 
+                        onSubmit={() => this.updateSetting("color", this.state.color)} 
+                    />
                 </div>
                 <div className="setting">
-                    <Input type="text" placeholder="Background Tag" value={this.props.bgtag} onChanged={val => this.setState({bgtag: val})} onSubmit={() => this.props.onChangeBg(this.state.bgtag)} />
-                    <button type="button" onClick={() => this.props.onChangeBg(this.state.bgtag)} className="btn">
-                        <i className="fa fa-save"></i>
-                    </button>
+                    <Input 
+                        type="text" 
+                        placeholder="Background Tag" 
+                        value={this.state.bgtag} 
+                        onChanged={val => this.updateSetting("bgtag", val)} 
+                        onSubmit={() => this.updateSetting("bgtag", this.state.bgtag)} 
+                    />
                 </div>
             </div>
         );
