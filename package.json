@@ -38,7 +38,8 @@
     "chalk": "^2.4.2",
     "preact": "^8.2.9",
     "preact-router": "^2.6.1",
-    "pretty-json-stringify": "0.0.2"
+    "pretty-json-stringify": "0.0.2",
+    "src": "^1.1.2"
   },
   "alias": {
     "shared": "./src/shared",
